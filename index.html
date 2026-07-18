@@ -257,9 +257,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <h2>Your Contact Info</h2>
     <p>This phone and email go into the SMS/email links at the end of each flow.</p>
     <label>Your phone number <span style="color:var(--muted)">(for SMS)</span></label>
-    <input type="text" id="setupPhone" placeholder="+15551234567" value="+15551234567">
+    <input type="tel" id="setupPhone" placeholder="(555) 123-4567">
     <label>Your email <span style="color:var(--muted)">(for email links)</span></label>
-    <input type="text" id="setupEmail" placeholder="you@locksmith.com" value="you@locksmith.com">
+    <input type="email" id="setupEmail" placeholder="you@locksmith.com">
     <button class="nav-btn" onclick="setupNext(6)">Next →</button>
     <button class="nav-btn secondary" onclick="setupPrev(4)">← Back</button>
   </div>
@@ -301,7 +301,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <div class="toggle-group" id="settingsTabs"></div>
 <div class="section-title">🏢 Business</div>
 <label>Business name</label><input type="text" id="setBizName" placeholder="Your Locksmith Co.">
-<label>Your phone</label><input type="text" id="setPhone" placeholder="+15551234567">
+<label>Your phone</label><input type="tel" id="setPhone" placeholder="(555) 123-4567">
 <label>Your email</label><input type="text" id="setEmail" placeholder="you@locksmith.com">
 <div class="section-title">🎨 Branding & Colors</div>
 <label>Accent color</label>
@@ -335,7 +335,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
    SETTINGS & SETUP
    ============================== */
 var defaultSettings = {
-  bizName:'Frantz Locksmith Service',phone:'+15551234567',email:'you@locksmith.com',
+  bizName:'Frantz Locksmith Service',phone:'',email:'',
   tabs:{resi:true,comm:true,auto:true,safe:true},
   accent:'#58a6ff',accent2:'#f0883e',bg:'#0d1117',bgImg:'',logo:'',fontSize:'16px',pin:''
 };
