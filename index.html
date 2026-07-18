@@ -421,7 +421,7 @@ function setupNext(n){
       var name=document.getElementById('setupBizName').value.trim();
       if(name){settings.bizName=name;saveSettings();}
     }
-    if(n===3||n===0){} // tabs or welcome
+    if(n===3||n===0){if(n===3)initSetupTabs();} // tabs refresh on step 3
     if(n===4){
       settings.accent=document.getElementById('setupAccent').value;
       settings.accent2=document.getElementById('setupAccent2').value;
