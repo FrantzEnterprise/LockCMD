@@ -437,7 +437,8 @@ function setupNext(n){
       settings.phone=document.getElementById('setupPhone').value.trim();
       settings.email=document.getElementById('setupEmail').value.trim();
       settings.country=document.getElementById('setupCountry').value;
-      saveSettings();
+      try{localStorage.setItem('lockcmd_settings',JSON.stringify(settings));}catch(e){alert('Save failed: '+e.message);}
+      applySettings();
     }
     document.getElementById('setupStep'+setupStep).style.display='none';
     setupStep=n;
