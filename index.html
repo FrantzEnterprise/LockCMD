@@ -626,6 +626,10 @@ function initSetupTabs(){
 function setupNext(n){
   try{
     if(n===1){
+      // Welcome → PIN step: no save, just transition
+    }
+    if(n===2){
+      // When coming from PIN step: validate and save PIN
       var pin=document.getElementById('setupPin').value.trim();
       var pin2=document.getElementById('setupPinConfirm').value.trim();
       if(pin.length<4||pin!==pin2){
@@ -635,8 +639,7 @@ function setupNext(n){
       document.getElementById('pinMatchErr').style.display='none';
       settings.pinHash=sha256(pin);
       localStorage.setItem('lockcmd_settings',JSON.stringify(settings));
-    }
-    if(n===2){
+      // Also save biz name
       var name=document.getElementById('setupBizName').value.trim();
       if(name){settings.bizName=name;saveSettings();}
     }
