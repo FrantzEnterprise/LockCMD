@@ -387,40 +387,43 @@ function initSetupTabs(){
 }
 
 function setupNext(n){
-  if(n===1){
-    var name=document.getElementById('setupBizName').value.trim();
-    if(name){settings.bizName=name;saveSettings();}
-  }
-  if(n===2){
-    // tabs already tracked via live toggles
-  }
-  if(n===3){
-    settings.accent=document.getElementById('setupAccent').value;saveSettings();
-    settings.accent2=document.getElementById('setupAccent2').value;saveSettings();
-    settings.bg=document.getElementById('setupBg').value;saveSettings();
-  }
-  if(n===4){
-    settings.logo=document.getElementById('setupLogo').value.trim();saveSettings();
-    settings.bgImg=document.getElementById('setupBgImg').value.trim();saveSettings();
-  }
-  if(n===5){
-    settings.phone=document.getElementById('setupPhone').value.trim();saveSettings();
-    settings.email=document.getElementById('setupEmail').value.trim();saveSettings();
-  }
-  if(n===6){
-    var pin=document.getElementById('setupPin').value.trim();
-    var pin2=document.getElementById('setupPinConfirm').value.trim();
-    if(pin.length<4||pin!==pin2){
-      document.getElementById('pinMatchErr').style.display='block';
-      return;
+  try{
+    if(n===1){
+      var name=document.getElementById('setupBizName').value.trim();
+      if(name){settings.bizName=name;saveSettings();}
     }
-    document.getElementById('pinMatchErr').style.display='none';
-    settings.pin=pin;
-    saveSettings();
-  }
-  document.getElementById('setupStep'+setupStep).style.display='none';
-  setupStep=n;
-  document.getElementById('setupStep'+setupStep).style.display='block';
+    if(n===2||n===0){} // tabs or welcome - no save needed
+    if(n===3){
+      settings.accent=document.getElementById('setupAccent').value;
+      settings.accent2=document.getElementById('setupAccent2').value;
+      settings.bg=document.getElementById('setupBg').value;
+      saveSettings();
+    }
+    if(n===4){
+      settings.logo=document.getElementById('setupLogo').value.trim();
+      settings.bgImg=document.getElementById('setupBgImg').value.trim();
+      saveSettings();
+    }
+    if(n===5){
+      settings.phone=document.getElementById('setupPhone').value.trim();
+      settings.email=document.getElementById('setupEmail').value.trim();
+      saveSettings();
+    }
+    if(n===6){
+      var pin=document.getElementById('setupPin').value.trim();
+      var pin2=document.getElementById('setupPinConfirm').value.trim();
+      if(pin.length<4||pin!==pin2){
+        document.getElementById('pinMatchErr').style.display='block';
+        return;
+      }
+      document.getElementById('pinMatchErr').style.display='none';
+      settings.pin=pin;
+      saveSettings();
+    }
+    document.getElementById('setupStep'+setupStep).style.display='none';
+    setupStep=n;
+    document.getElementById('setupStep'+setupStep).style.display='block';
+  }catch(e){alert('Error: '+e.message);}
 }
 function setupPrev(n){
   document.getElementById('setupStep'+setupStep).style.display='none';
@@ -480,8 +483,8 @@ function updateSettingsDrawer(){
   if(document.getElementById('setBgImg'))document.getElementById('setBgImg').value=s.bgImg||'';
   if(document.getElementById('setLogo'))document.getElementById('setLogo').value=s.logo||'';
   if(document.getElementById('setFontSize'))document.getElementById('setFontSize').value=s.fontSize;
-  document.getElementById('setNewPin').value='';
-  document.getElementById('setNewPinConfirm').value='';
+  if(document.getElementById('setNewPin'))document.getElementById('setNewPin').value='';
+  if(document.getElementById('setNewPinConfirm'))document.getElementById('setNewPinConfirm').value='';
 }
 document.addEventListener('input',function(e){
   var id=e.target.id;if(!id)return;var s=settings;
