@@ -393,6 +393,18 @@ function setupNext(n){
   }
   if(n===2){
     // tabs already tracked via live toggles
+  }
+  if(n===3){
+    settings.accent=document.getElementById('setupAccent').value;saveSettings();
+    settings.accent2=document.getElementById('setupAccent2').value;saveSettings();
+    settings.bg=document.getElementById('setupBg').value;saveSettings();
+  }
+  if(n===4){
+    settings.logo=document.getElementById('setupLogo').value.trim();saveSettings();
+    settings.bgImg=document.getElementById('setupBgImg').value.trim();saveSettings();
+  }
+  if(n===5){
+    settings.phone=document.getElementById('setupPhone').value.trim();saveSettings();
     settings.email=document.getElementById('setupEmail').value.trim();saveSettings();
   }
   if(n===6){
