@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes">
+<title>LockCMD — Locksmith Command Center</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--bg2:#161b22;--surface:#21262d;--surface2:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;--accent2:#f0883e;--green:#3fb950;--orange:#d29922;--border:#30363d;--radius:12px;--font:'Inter','Segoe UI',system-ui,sans-serif}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+.top{background:var(--bg2);padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.top .brand{font-weight:700;font-size:15px;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.top .brand span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.top a{color:var(--cyan);font-size:12px;text-decoration:none;padding:3px 8px;background:var(--surface);border-radius:4px}
+.tab-bar{display:flex;gap:1px;overflow-x:auto;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:43px;z-index:99}
+.tab-bar .tab{padding:8px 14px;cursor:pointer;white-space:nowrap;background:transparent;color:var(--muted);font-size:13px;border-bottom:2px solid transparent;flex-shrink:0;transition:.15s}
+.tab-bar .tab:hover{color:var(--text);background:var(--surface)}
+.tab-bar .tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--bg)}
+.panel{display:none}
+.panel.active{display:block}
+.wrap{max-width:700px;margin:0 auto;padding:20px 16px}
+.flow-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:12px;min-height:300px;display:flex;flex-direction:column}
+.flow-step{font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.flow-q{font-size:18px;font-weight:600;margin-bottom:16px;line-height:1.4}
+.flow-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.flow-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;cursor:pointer;font-size:15px;color:var(--text);text-align:left;transition:.15s;display:flex;align-items:center;gap:10px}
+.flow-btn:hover{background:var(--surface2);border-color:var(--accent);transform:translateX(3px)}
+.flow-btn .icon{font-size:20px;flex-shrink:0}
+.flow-input{margin-bottom:12px}
+.flow-input input,.flow-input textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:15px;color:var(--text);font-family:var(--font)}
+.flow-input input:focus,.flow-input textarea:focus{outline:none;border-color:var(--accent)}
+.flow-nav{display:flex;gap:8px;margin-top:auto;padding-top:12px}
+.flow-nav button{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 16px;cursor:pointer;font-size:13px;color:var(--text)}
+.flow-nav button:hover{background:var(--surface2)}
+.flow-nav button.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600}
+.result{display:none;background:var(--bg2);border:1px solid var(--accent);border-radius:var(--radius);padding:20px;margin-top:8px;text-align:center}
+.result.show{display:block}
+.result h3{color:var(--green);font-size:16px;margin-bottom:10px}
+.result .msg{background:var(--surface);border-radius:8px;padding:14px;text-align:left;font-size:13px;line-height:1.6;margin:12px 0;white-space:pre-wrap}
+.result .send-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.result .send-links a{background:var(--accent);color:var(--bg);text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px}
+.result .send-links a.email{background:var(--orange)}
+.result .reset-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:6px;cursor:pointer;margin-top:12px;font-size:12px}
+.flow-step-dots{display:flex;gap:4px;margin-bottom:12px}
+.flow-step-dots span{width:8px;height:8px;border-radius:50%;background:var(--surface2)}
+.flow-step-dots span.active{background:var(--accent)}
+.flow-step-dots span.done{background:var(--green)}
+@media(max-width:600px){
+  .wrap{padding:12px}
+  .flow-card{padding:16px;min-height:250px}
+  .flow-q{font-size:16px}
+  .flow-btn{padding:12px 14px;font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">🔧 <span>LockCMD</span></div>
+  <a href="help.html">❓</a>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('resi')">🏠 Residential</div>
+  <div class="tab" onclick="switchTab('comm')">🏢 Commercial</div>
+  <div class="tab" onclick="switchTab('auto')">🚗 Automotive</div>
+  <div class="tab" onclick="switchTab('safe')">🔒 Safe</div>
+</div>
+
+<!-- ============ RESIDENTIAL ============ -->
+<div class="panel active" id="panel-resi">
+<div class="wrap">
+<div class="flow-card" id="resiFlow">
+  <div class="flow-step-dots" id="resiDots"></div>
+  <div class="flow-step" id="resiStepLabel">Step 1 of 6</div>
+  <div class="flow-q" id="resiQ"></div>
+  <div class="flow-options" id="resiOpts"></div>
+  <div class="flow-input" id="resiInput" style="display:none"></div>
+  <div class="result" id="resiResult"></div>
+  <div class="flow-nav" id="resiNav"></div>
+</div>
+</div>
+</div>
+
+<!-- ============ COMMERCIAL ============ -->
+<div class="panel" id="panel-comm">
+<div class="wrap">
+<div class="flow-card" id="commFlow">
+  <div class="flow-step-dots" id="commDots"></div>
+  <div class="flow-step" id="commStepLabel">Step 1 of 6</div>
+  <div class="flow-q" id="commQ"></div>
+  <div class="flow-options" id="commOpts"></div>
+  <div class="flow-input" id="commInput" style="display:none"></div>
+  <div class="result" id="commResult"></div>
+  <div class="flow-nav" id="commNav"></div>
+</div>
+</div>
+</div>
+
+<!-- ============ AUTOMOTIVE ============ -->
+<div class="panel" id="panel-auto">
+<div class="wrap">
+<div class="flow-card" id="autoFlow">
+  <div class="flow-step-dots" id="autoDots"></div>
+  <div class="flow-step" id="autoStepLabel">Step 1 of 6</div>
+  <div class="flow-q" id="autoQ"></div>
+  <div class="flow-options" id="autoOpts"></div>
+  <div class="flow-input" id="autoInput" style="display:none"></div>
+  <div class="result" id="autoResult"></div>
+  <div class="flow-nav" id="autoNav"></div>
+</div>
+</div>
+</div>
+
+<!-- ============ SAFE ============ -->
+<div class="panel" id="panel-safe">
+<div class="wrap">
+<div class="flow-card" id="safeFlow">
+  <div class="flow-step-dots" id="safeDots"></div>
+  <div class="flow-step" id="safeStepLabel">Step 1 of 6</div>
+  <div class="flow-q" id="safeQ"></div>
+  <div class="flow-options" id="safeOpts"></div>
+  <div class="flow-input" id="safeInput" style="display:none"></div>
+  <div class="result" id="safeResult"></div>
+  <div class="flow-nav" id="safeNav"></div>
+</div>
+</div>
+</div>
+
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab-bar .tab').forEach(t=>t.classList.remove('active'))
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelector('.tab-bar .tab[onclick*="'+id+'"]').classList.add('active')
+  document.getElementById('panel-'+id).classList.add('active')
+  history.replaceState(null,'','#'+id)
+}
+
+// ---- FLOW ENGINE ----
+var flows = {
+  resi: {
+    steps: [
+      {q:"What's the situation?", opts:["🔑 Locked out","🔐 Need rekey","🛠️ Lock repair","📋 New install","🔑 Keys need duplication"], key:'situation'},
+      {q:"What type of lock?", opts:["🚪 Deadbolt","🚪 Knob lock","🚪 Handle set","🚪 Smart lock","❓ Not sure"], key:'lockType'},
+      {q:"Is this urgent?", opts:["🚨 Yes — locked out now","⏰ Today","📅 Can schedule"], key:'urgency'},
+      {q:"Your name?", input:true, key:'name', placeholder:'John Smith'},
+      {q:"Your phone number?", input:true, key:'phone', placeholder:'(555) 123-4567'},
+      {q:"Service address?", input:true, key:'address', placeholder:'123 Main St, City, State'},
+    ],
+    build: function(a){
+      var urg = a.urgency==="🚨 Yes — locked out now"?"🚨 EMERGENCY":a.urgency==="⏰ Today"?"⏰ Today":"📅 Scheduled";
+      return "🔐 RESIDENTIAL LOCKSMITH REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nAddress: "+a.address+"\nSituation: "+a.situation+"\nLock type: "+a.lockType+"\nUrgency: "+urg+"\n\nPlease contact me to confirm."
+    }
+  },
+  comm: {
+    steps: [
+      {q:"What type of business?", opts:["🏢 Office","🏭 Warehouse","🏪 Retail","🏥 Medical","🏫 School/Church","🏢 Other commercial"], key:'bizType'},
+      {q:"What's needed?", opts:["🔑 Master key system","🔐 Rekey multiple doors","🛠️ Panic hardware service","📋 New door hardware install","🔒 Access control","❓ Consultation"], key:'service'},
+      {q:"Approx number of doors?", opts:["1-5","6-15","16-30","30+"], key:'doors'},
+      {q:"Your name / company?", input:true, key:'name', placeholder:'Company name'},
+      {q:"Best phone number?", input:true, key:'phone', placeholder:'(555) 123-4567'},
+      {q:"Business address?", input:true, key:'address', placeholder:'456 Business Ave'},
+    ],
+    build: function(a){
+      return "🏢 COMMERCIAL SERVICE REQUEST\n\nCompany: "+a.name+"\nPhone: "+a.phone+"\nAddress: "+a.address+"\nBusiness type: "+a.bizType+"\nService: "+a.service+"\nDoors: "+a.doors+"\n\nPlease contact me to schedule a walkthrough."
+    }
+  },
+  auto: {
+    steps: [
+      {q:"What's the situation?", opts:["🚗 Locked out of car","🔑 Lost all keys","🔧 Key broke in ignition","🔄 Need new fob","🚙 Trunk locked","❓ Other"], key:'situation'},
+      {q:"Vehicle year?", input:true, key:'year', placeholder:'2020'},
+      {q:"Vehicle make & model?", input:true, key:'make', placeholder:'Toyota Camry'},
+      {q:"Where's the vehicle?", opts:["🏠 At home","🅿️ Parking lot","🏪 Store parking","🛣️ Street side","📍 Other location"], key:'location'},
+      {q:"Your name?", input:true, key:'name', placeholder:'John Smith'},
+      {q:"Your phone number?", input:true, key:'phone', placeholder:'(555) 123-4567'},
+    ],
+    build: function(a){
+      return "🚗 AUTOMOTIVE SERVICE REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nVehicle: "+a.year+" "+a.make+"\nSituation: "+a.situation+"\nLocation: "+a.location+"\n\nPlease contact me."
+    }
+  },
+  safe: {
+    steps: [
+      {q:"What kind of safe?", opts:["🏠 Home / gun safe","🏢 Commercial safe","🔒 TL / high security","🏛️ Antique / vintage","🪙 Floor / wall safe","📦 Jewelry chest"], key:'type'},
+      {q:"What's the issue?", opts:["🔐 Won't open / locked out","🔄 Dial spins freely","⚡ Digital keypad dead","🔑 Combo forgotten","🔧 Handle broken","🔒 Won't lock"], key:'issue'},
+      {q:"Brand (if known)?", input:true, key:'brand', placeholder:'AMSEC, Gardall, Liberty, etc.'},
+      {q:"Approx age?", opts:["🆕 New (0-5 yrs)","📅 Modern (5-20)","🕰️ Vintage (20-50)","🏛️ Antique (50+)","❓ Unknown"], key:'age'},
+      {q:"Your name?", input:true, key:'name', placeholder:'John Smith'},
+      {q:"Your phone number?", input:true, key:'phone', placeholder:'(555) 123-4567'},
+    ],
+    build: function(a){
+      return "🔒 SAFE SERVICE REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nSafe type: "+a.type+"\nBrand: "+a.brand+"\nAge: "+a.age+"\nIssue: "+a.issue+"\n\nPlease contact me."
+    }
+  }
+};
+
+var state = {};
+
+function startFlow(key){
+  state[key] = {answers:{}, step:0};
+  renderStep(key);
+}
+
+function renderStep(key){
+  var f = flows[key];
+  var s = state[key];
+  var step = f.steps[s.step];
+  var total = f.steps.length;
+
+  // Dots
+  var dotsHtml = '';
+  for(var i=0;i<total;i++){
+    var cls = i===s.step?'active':i<s.step?'done':'';
+    dotsHtml += '<span class="'+cls+'"></span>';
+  }
+  document.getElementById(key+'Dots').innerHTML = dotsHtml;
+  document.getElementById(key+'StepLabel').textContent = 'Step '+(s.step+1)+' of '+total;
+
+  // Question
+  document.getElementById(key+'Q').textContent = step.q;
+
+  // Options or input
+  var optsEl = document.getElementById(key+'Opts');
+  var inputEl = document.getElementById(key+'Input');
+  var navEl = document.getElementById(key+'Nav');
+
+  if(step.opts){
+    optsEl.style.display = 'flex';
+    inputEl.style.display = 'none';
+    optsEl.innerHTML = step.opts.map(function(o){
+      return '<div class="flow-btn" onclick="answer(\''+key+'\',\''+o.replace(/'/g,"\\'")+'\')"><span class="icon">→</span> '+o+'</div>';
+    }).join('');
+  } else if(step.input){
+    optsEl.style.display = 'none';
+    inputEl.style.display = 'block';
+    var ph = step.placeholder||'';
+    var val = s.answers[step.key]||'';
+    inputEl.innerHTML = '<input type="text" id="'+key+'InputField" placeholder="'+ph+'" value="'+val+'" onkeydown="if(event.key==\'Enter\')answerInput(\''+key+'\')">';
+    setTimeout(function(){var el=document.getElementById(key+'InputField');if(el)el.focus();},50);
+  }
+
+  // Hide nav on option steps, show back+next on input steps
+  if(step.opts){
+    navEl.innerHTML = '';
+  } else {
+    var backBtn = s.step > 0 ? '<button onclick="back(\''+key+'\')">← Back</button>' : '';
+    navEl.innerHTML = backBtn + '<button class="primary" onclick="answerInput(\''+key+'\')">Continue →</button>';
+  }
+
+  // Hide result
+  document.getElementById(key+'Result').classList.remove('show');
+}
+
+function answer(key,val){
+  var f = flows[key];
+  var s = state[key];
+  var step = f.steps[s.step];
+  s.answers[step.key] = val;
+  s.step++;
+  if(s.step >= f.steps.length){
+    showResult(key);
+  } else {
+    renderStep(key);
+  }
+}
+
+function answerInput(key){
+  var f = flows[key];
+  var s = state[key];
+  var step = f.steps[s.step];
+  var val = document.getElementById(key+'InputField').value.trim();
+  if(!val) return;
+  s.answers[step.key] = val;
+  s.step++;
+  if(s.step >= f.steps.length){
+    showResult(key);
+  } else {
+    renderStep(key);
+  }
+}
+
+function back(key){
+  var s = state[key];
+  if(s.step > 0){
+    s.step--;
+    renderStep(key);
+  }
+}
+
+function showResult(key){
+  var f = flows[key];
+  var s = state[key];
+  var msg = f.build(s.answers);
+
+  var el = document.getElementById(key+'Result');
+  var subject = "LockCMD: "+key.toUpperCase()+" Service Request";
+  
+  el.innerHTML = '<h3>✅ Done! Send this to your locksmith</h3>'+
+    '<div class="msg">'+msg.replace(/\n/g,'<br>')+'</div>'+
+    '<div class="send-links">'+
+      '<a href="sms:&body='+encodeURIComponent(msg)+'">📱 Send via Text</a>'+
+      '<a class="email" href="mailto:?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(msg)+'">📧 Send via Email</a>'+
+    '</div>'+
+    '<button class="reset-btn" onclick="startFlow(\''+key+'\')">🔄 Start Over</button>';
+
+  el.classList.add('show');
+  document.getElementById(key+'Opts').style.display = 'none';
+  document.getElementById(key+'Input').style.display = 'none';
+  document.getElementById(key+'Nav').innerHTML = '';
+}
+
+// Init all flows
+startFlow('resi');
+startFlow('comm');
+startFlow('auto');
+startFlow('safe');
+
+// Hash nav
+var h=location.hash.replace('#','');
+if(h&&document.getElementById('panel-'+h)){
+  switchTab(h);
+}
+</script>
+</body>
+</html>
