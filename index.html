@@ -202,30 +202,30 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
   </div>
 
-  <!-- Step 1: Business name -->
+<!-- Step 1: Business name -->
   <div class="setup-step" id="setupStep1" style="display:none">
-    <div class="step-ind">Step 1 of 7</div>
+    <div class="step-ind">Step 2 of 7</div>
     <h2>Your Business Name</h2>
     <p>This appears in the top bar so customers know who they're contacting.</p>
     <label>Business name</label>
-    <input type="text" id="setupBizName" placeholder="Your Locksmith Co." value="Frantz Locksmith Service" onkeydown="if(event.key==='Enter')setupNext(2)">
-    <button class="nav-btn" onclick="setupNext(2)">Next →</button>
-    <button class="nav-btn secondary" onclick="setupPrev(0)">← Back</button>
-  </div>
-
-  <!-- Step 2: Which services -->
-  <div class="setup-step" id="setupStep2" style="display:none">
-    <div class="step-ind">Step 2 of 7</div>
-    <h2>Which Services Do You Offer?</h2>
-    <p>Toggle the tabs you want customers to see. Turn off anything you don't do.</p>
-    <div class="toggle-group" id="setupTabs"></div>
+    <input type="text" id="setupBizName" placeholder="Your Locksmith Co." value="Frantz Locksmith Service" onkeydown="if(event.key==='Enter')setupNext(3)">
     <button class="nav-btn" onclick="setupNext(3)">Next →</button>
     <button class="nav-btn secondary" onclick="setupPrev(1)">← Back</button>
   </div>
 
+  <!-- Step 2: Which services -->
+  <div class="setup-step" id="setupStep2" style="display:none">
+    <div class="step-ind">Step 3 of 7</div>
+    <h2>Which Services Do You Offer?</h2>
+    <p>Toggle the tabs you want customers to see. Turn off anything you don't do.</p>
+    <div class="toggle-group" id="setupTabs"></div>
+    <button class="nav-btn" onclick="setupNext(3)">Next →</button>
+    <button class="nav-btn secondary" onclick="setupPrev(2)">← Back</button>
+  </div>
+
   <!-- Step 3: Colors -->
   <div class="setup-step" id="setupStep3" style="display:none">
-    <div class="step-ind">Step 3 of 7</div>
+    <div class="step-ind">Step 4 of 7</div>
     <h2>Brand Colors</h2>
     <p>Match LockCMD to your website. Pick colors or keep the defaults.</p>
     <label>Accent color (main)</label>
@@ -253,7 +253,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 5: Contact -->
   <div class="setup-step" id="setupStep5" style="display:none">
-    <div class="step-ind">Step 5 of 7</div>
+    <div class="step-ind">Step 6 of 7</div>
     <h2>Your Contact Info</h2>
     <p>This phone and email go into the SMS/email links at the end of each flow.</p>
     <label>Your phone number <span style="color:var(--muted)">(for SMS)</span></label>
@@ -490,21 +490,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
     <label>Your email <span style="color:var(--muted)">(for email links)</span></label>
     <input type="email" id="setupEmail" placeholder="you@locksmith.com">
-    <button class="nav-btn" onclick="setupNext(6)">Next →</button>
-    <button class="nav-btn secondary" onclick="setupPrev(4)">← Back</button>
-  </div>
-
-  <!-- Step 6: PIN -->
-  <div class="setup-step" id="setupStep6" style="display:none">
-    <div class="step-ind">Step 6 of 7</div>
-    <h2>Create a PIN</h2>
-    <p>This PIN locks the settings so customers can't change your config. 4-6 digits.</p>
-    <div class="pin-input"><input type="password" id="setupPin" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="••••" onkeydown="if(event.key==='Enter')setupNext(7)"></div>
-    <label style="margin-top:6px">Confirm PIN</label>
-    <div class="pin-input"><input type="password" id="setupPinConfirm" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="••••" onkeydown="if(event.key==='Enter')setupNext(7)"></div>
-    <div class="error" id="pinMatchErr">PINs don't match. Enter 4-6 digits.</div>
     <button class="nav-btn" onclick="setupNext(7)">Next →</button>
     <button class="nav-btn secondary" onclick="setupPrev(5)">← Back</button>
+  </div>
+
+  <!-- Step 1: PIN -->
+  <div class="setup-step" id="setupStep6" style="display:none">
+    <div class="step-ind">Step 1 of 7</div>
+    <h2>Create a PIN</h2>
+    <p>This PIN locks the settings so customers can't change your config. 4-6 digits.</p>
+    <div class="pin-input"><input type="password" id="setupPin" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="••••" onkeydown="if(event.key==='Enter')setupNext(2)"></div>
+    <label style="margin-top:6px">Confirm PIN</label>
+    <div class="pin-input"><input type="password" id="setupPinConfirm" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="••••" onkeydown="if(event.key==='Enter')setupNext(2)"></div>
+    <div class="error" id="pinMatchErr">PINs don't match. Enter 4-6 digits.</div>
+    <button class="nav-btn" onclick="setupNext(2)">Next →</button>
+    <button class="nav-btn secondary" onclick="setupPrev(0)">← Back</button>
   </div>
 
   <!-- Step 7: Done -->
@@ -564,16 +564,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 /* ==============================
    SETTINGS & SETUP
    ============================== */
+/* Simple PIN hash */
+function sha256(str){
+  var h=0;for(var i=0;i<str.length;i++){h=((h<<5)-h)+str.charCodeAt(i);h|=0;}
+  return Math.abs(h).toString(16).padStart(8,'0');
+}
+
 var defaultSettings = {
   bizName:'Frantz Locksmith Service',phone:'',email:'',country:'1',
   tabs:{resi:true,comm:true,auto:true,safe:true},
-  accent:'#58a6ff',accent2:'#f0883e',bg:'#0d1117',bgImg:'',logo:'',fontSize:'16px',pin:''
+  accent:'#58a6ff',accent2:'#f0883e',bg:'#0d1117',bgImg:'',logo:'',fontSize:'16px',pinHash:''
 };
 var settings = {};
+var drawerUnlocked = false;
 
 function loadSettings(){
   try{var s=localStorage.getItem('lockcmd_settings');settings=s?JSON.parse(s):JSON.parse(JSON.stringify(defaultSettings));}catch(e){settings=JSON.parse(JSON.stringify(defaultSettings));}
-  if(!settings.pin){
+  if(!settings.pinHash){
     document.getElementById('setupOverlay').classList.remove('hidden');
     initSetupTabs();
   } else {
@@ -604,7 +611,7 @@ function applySettings(){
 /* Setup wizard */
 var setupStep=0;
 function initSetupTabs(){
-  var s=settings,labels={resi:'🏠 Residential',comm:'🏢 Commercial',auto:'🚗 Automotive',safe:'🔒 Safe'};
+  var s=settings,labels={resi:'Residential',comm:'Commercial',auto:'Automotive',safe:'Safe'};
   var el=document.getElementById('setupTabs');if(!el)return;
   el.innerHTML='';
   for(var k in labels){
@@ -619,28 +626,6 @@ function initSetupTabs(){
 function setupNext(n){
   try{
     if(n===1){
-      var name=document.getElementById('setupBizName').value.trim();
-      if(name){settings.bizName=name;saveSettings();}
-    }
-    if(n===2||n===0){} // tabs or welcome - no save needed
-    if(n===3){
-      settings.accent=document.getElementById('setupAccent').value;
-      settings.accent2=document.getElementById('setupAccent2').value;
-      settings.bg=document.getElementById('setupBg').value;
-      saveSettings();
-    }
-    if(n===4){
-      settings.logo=document.getElementById('setupLogo').value.trim();
-      settings.bgImg=document.getElementById('setupBgImg').value.trim();
-      saveSettings();
-    }
-    if(n===5){
-      settings.phone=document.getElementById('setupPhone').value.trim();
-      settings.email=document.getElementById('setupEmail').value.trim();
-      settings.country=document.getElementById('setupCountry').value;
-      saveSettings();
-    }
-    if(n===6){
       var pin=document.getElementById('setupPin').value.trim();
       var pin2=document.getElementById('setupPinConfirm').value.trim();
       if(pin.length<4||pin!==pin2){
@@ -648,7 +633,29 @@ function setupNext(n){
         return;
       }
       document.getElementById('pinMatchErr').style.display='none';
-      settings.pin=pin;
+      settings.pinHash=sha256(pin);
+      localStorage.setItem('lockcmd_settings',JSON.stringify(settings));
+    }
+    if(n===2){
+      var name=document.getElementById('setupBizName').value.trim();
+      if(name){settings.bizName=name;saveSettings();}
+    }
+    if(n===3||n===0){} // tabs or welcome
+    if(n===4){
+      settings.accent=document.getElementById('setupAccent').value;
+      settings.accent2=document.getElementById('setupAccent2').value;
+      settings.bg=document.getElementById('setupBg').value;
+      saveSettings();
+    }
+    if(n===5){
+      settings.logo=document.getElementById('setupLogo').value.trim();
+      settings.bgImg=document.getElementById('setupBgImg').value.trim();
+      saveSettings();
+    }
+    if(n===6){
+      settings.phone=document.getElementById('setupPhone').value.trim();
+      settings.email=document.getElementById('setupEmail').value.trim();
+      settings.country=document.getElementById('setupCountry').value;
       saveSettings();
     }
     document.getElementById('setupStep'+setupStep).style.display='none';
@@ -662,15 +669,20 @@ function setupPrev(n){
   document.getElementById('setupStep'+setupStep).style.display='block';
 }
 function skipSetup(){
-  settings.pin='0000';
-  saveSettings();
+  settings.pinHash=sha256('0000');
+  localStorage.setItem('lockcmd_settings',JSON.stringify(settings));
+  drawerUnlocked=true;
   document.getElementById('setupOverlay').classList.add('hidden');
   document.getElementById('gearBtn').classList.add('show');
+  applySettings();
 }
 function finishSetup(){
+  drawerUnlocked=true;
   document.getElementById('setupOverlay').classList.add('hidden');
   document.getElementById('gearBtn').classList.add('show');
 }
+
+/* Settings drawer - PIN + session flag */
 function openPinModal(){
   document.getElementById('pinModal').classList.add('show');
   document.getElementById('pinErr').style.display='none';
@@ -680,7 +692,8 @@ function openPinModal(){
 function closePinModal(){document.getElementById('pinModal').classList.remove('show');}
 function checkPin(){
   var val=document.getElementById('pinInput').value.trim();
-  if(val===settings.pin){
+  if(sha256(val)===settings.pinHash){
+    drawerUnlocked=true;
     closePinModal();
     document.getElementById('settingsOverlay').classList.add('show');
     document.getElementById('settingsDrawer').classList.add('open');
@@ -691,8 +704,23 @@ function checkPin(){
     document.getElementById('pinInput').focus();
   }
 }
+function closeSettings(){
+  document.getElementById('settingsOverlay').classList.remove('show');
+  document.getElementById('settingsDrawer').classList.remove('open');
+}
+function handleSettingsDone(){
+  var newPin=document.getElementById('setNewPin').value.trim();
+  var newPin2=document.getElementById('setNewPinConfirm').value.trim();
+  if(newPin&&newPin.length>=4&&newPin===newPin2){
+    settings.pinHash=sha256(newPin);
+    saveSettings();
+  }
+  closeSettings();
+}
+
 function updateSettingsDrawer(){
-  var s=settings,labels={resi:'🏠 Residential',comm:'🏢 Commercial',auto:'🚗 Automotive',safe:'🔒 Safe'};
+  if(!document.getElementById('setBizName'))return;
+  var s=settings,labels={resi:'Residential',comm:'Commercial',auto:'Automotive',safe:'Safe'};
   var el=document.getElementById('settingsTabs');if(!el)return;
   el.innerHTML='';
   for(var k in s.tabs){
@@ -702,23 +730,24 @@ function updateSettingsDrawer(){
     btn.onclick=function(ke){return function(){s.tabs[ke]=!s.tabs[ke];saveSettings();updateSettingsDrawer();};}(k);
     el.appendChild(btn);
   }
-  if(document.getElementById('setBizName'))document.getElementById('setBizName').value=s.bizName||'';
-  if(document.getElementById('setPhone'))document.getElementById('setPhone').value=s.phone||'';
+  document.getElementById('setBizName').value=s.bizName||'';
+  document.getElementById('setPhone').value=s.phone||'';
   if(document.getElementById('setCountry'))document.getElementById('setCountry').value=s.country||'1';
-  if(document.getElementById('setEmail'))document.getElementById('setEmail').value=s.email||'';
-  if(document.getElementById('setAccent'))document.getElementById('setAccent').value=s.accent;
+  document.getElementById('setEmail').value=s.email||'';
+  document.getElementById('setAccent').value=s.accent;
   if(document.getElementById('setAccentTxt'))document.getElementById('setAccentTxt').value=s.accent;
-  if(document.getElementById('setAccent2'))document.getElementById('setAccent2').value=s.accent2;
+  document.getElementById('setAccent2').value=s.accent2;
   if(document.getElementById('setAccent2Txt'))document.getElementById('setAccent2Txt').value=s.accent2;
-  if(document.getElementById('setBg'))document.getElementById('setBg').value=s.bg;
+  document.getElementById('setBg').value=s.bg;
   if(document.getElementById('setBgTxt'))document.getElementById('setBgTxt').value=s.bg;
-  if(document.getElementById('setBgImg'))document.getElementById('setBgImg').value=s.bgImg||'';
-  if(document.getElementById('setLogo'))document.getElementById('setLogo').value=s.logo||'';
-  if(document.getElementById('setFontSize'))document.getElementById('setFontSize').value=s.fontSize;
-  if(document.getElementById('setNewPin'))document.getElementById('setNewPin').value='';
-  if(document.getElementById('setNewPinConfirm'))document.getElementById('setNewPinConfirm').value='';
+  document.getElementById('setBgImg').value=s.bgImg||'';
+  document.getElementById('setLogo').value=s.logo||'';
+  document.getElementById('setFontSize').value=s.fontSize;
+  document.getElementById('setNewPin').value='';
+  document.getElementById('setNewPinConfirm').value='';
 }
 document.addEventListener('input',function(e){
+  if(!drawerUnlocked)return;
   var id=e.target.id;if(!id)return;var s=settings;
   if(id==='setBizName'){s.bizName=e.target.value;saveSettings();}
   if(id==='setPhone'){s.phone=e.target.value;saveSettings();}
@@ -731,19 +760,6 @@ document.addEventListener('input',function(e){
   if(id==='setLogo'){s.logo=e.target.value;saveSettings();}
   if(id==='setFontSize'){s.fontSize=e.target.value;saveSettings();}
 });
-function closeSettings(){
-  document.getElementById('settingsOverlay').classList.remove('show');
-  document.getElementById('settingsDrawer').classList.remove('open');
-}
-function handleSettingsDone(){
-  var newPin=document.getElementById('setNewPin').value.trim();
-  var newPin2=document.getElementById('setNewPinConfirm').value.trim();
-  if(newPin&&newPin.length>=4&&newPin===newPin2){
-    settings.pin=newPin;
-    saveSettings();
-  }
-  closeSettings();
-}
 function exportSettings(){
   var blob=new Blob([JSON.stringify(settings,null,2)],{type:'application/json'});
   var a=document.createElement('a');
@@ -766,12 +782,13 @@ function importSettings(e){
   reader.readAsText(file);
 }
 function resetSettings(){
-  if(confirm('Reset all settings to default? This will clear your PIN.')){
+  if(confirm('Reset all settings to default? This will clear your PIN and the gear will hide.')){
     settings=JSON.parse(JSON.stringify(defaultSettings));
-    saveSettings();
-    updateSettingsDrawer();
-    document.getElementById('setupOverlay').classList.remove('hidden');
+    localStorage.setItem('lockcmd_settings',JSON.stringify(settings));
+    drawerUnlocked=false;
     document.getElementById('gearBtn').classList.remove('show');
+    document.getElementById('setupOverlay').classList.remove('hidden');
+    initSetupTabs();
   }
 }
 function switchTab(id){
@@ -782,10 +799,10 @@ function switchTab(id){
   history.replaceState(null,'','#'+id);
 }
 var flows={
-  resi:{steps:[{q:"What's the situation?",opts:["🔑 Locked out","🔐 Need rekey","🛠️ Lock repair","📋 New install","🔑 Keys need duplication"],key:'situation'},{q:"What type of lock?",opts:["🚪 Deadbolt","🚪 Knob lock","🚪 Handle set","🚪 Smart lock","❓ Not sure"],key:'lockType'},{q:"Is this urgent?",opts:["🚨 Yes - locked out now","⏰ Today","📅 Can schedule"],key:'urgency'},{q:"Your name?",input:true,key:'name',placeholder:'John Smith'},{q:"Your phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'},{q:"Service address?",input:true,key:'address',placeholder:'123 Main St, City, State'}],build:function(a){var u=a.urgency==="🚨 Yes - locked out now"?"🚨 EMERGENCY":a.urgency==="⏰ Today"?"⏰ Today":"📅 Scheduled";return "🔐 RESIDENTIAL LOCKSMITH REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nAddress: "+a.address+"\nSituation: "+a.situation+"\nLock type: "+a.lockType+"\nUrgency: "+u+"\n\nPlease contact me to confirm."}},
-  comm:{steps:[{q:"What type of business?",opts:["🏢 Office","🏭 Warehouse","🏪 Retail","🏥 Medical","🏫 School/Church","🏢 Other commercial"],key:'bizType'},{q:"What's needed?",opts:["🔑 Master key system","🔐 Rekey multiple doors","🛠️ Panic hardware service","📋 New door hardware install","🔒 Access control","❓ Consultation"],key:'service'},{q:"Approx number of doors?",opts:["1-5","6-15","16-30","30+"],key:'doors'},{q:"Your name / company?",input:true,key:'name',placeholder:'Company name'},{q:"Best phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'},{q:"Business address?",input:true,key:'address',placeholder:'456 Business Ave'}],build:function(a){return "🏢 COMMERCIAL SERVICE REQUEST\n\nCompany: "+a.name+"\nPhone: "+a.phone+"\nAddress: "+a.address+"\nBusiness type: "+a.bizType+"\nService: "+a.service+"\nDoors: "+a.doors+"\n\nPlease contact me to schedule a walkthrough."}},
-  auto:{steps:[{q:"What's the situation?",opts:["🚗 Locked out of car","🔑 Lost all keys","🔧 Key broke in ignition","🔄 Need new fob","🚙 Trunk locked","❓ Other"],key:'situation'},{q:"Vehicle year?",input:true,key:'year',placeholder:'2020'},{q:"Vehicle make & model?",input:true,key:'make',placeholder:'Toyota Camry'},{q:"Where's the vehicle?",opts:["🏠 At home","🅿️ Parking lot","🏪 Store parking","🛣️ Street side","📍 Other location"],key:'location'},{q:"Your name?",input:true,key:'name',placeholder:'John Smith'},{q:"Your phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'}],build:function(a){return "🚗 AUTOMOTIVE SERVICE REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nVehicle: "+a.year+" "+a.make+"\nSituation: "+a.situation+"\nLocation: "+a.location+"\n\nPlease contact me."}},
-  safe:{steps:[{q:"What kind of safe?",opts:["🏠 Home / gun safe","🏢 Commercial safe","🔒 TL / high security","🏛️ Antique / vintage","🪙 Floor / wall safe","📦 Jewelry chest"],key:'type'},{q:"What's the issue?",opts:["🔐 Won't open / locked out","🔄 Dial spins freely","⚡ Digital keypad dead","🔑 Combo forgotten","🔧 Handle broken","🔒 Won't lock"],key:'issue'},{q:"Brand (if known)?",input:true,key:'brand',placeholder:'AMSEC, Gardall, Liberty, etc.'},{q:"Approx age?",opts:["🆕 New (0-5 yrs)","📅 Modern (5-20)","🕰️ Vintage (20-50)","🏛️ Antique (50+)","❓ Unknown"],key:'age'},{q:"Your name?",input:true,key:'name',placeholder:'John Smith'},{q:"Your phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'}],build:function(a){return "🔒 SAFE SERVICE REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nSafe type: "+a.type+"\nBrand: "+a.brand+"\nAge: "+a.age+"\nIssue: "+a.issue+"\n\nPlease contact me."}}
+  resi:{steps:[{q:"What's the situation?",opts:["Locked out","Need rekey","Lock repair","New install","Keys need duplication"],key:'situation'},{q:"What type of lock?",opts:["Deadbolt","Knob lock","Handle set","Smart lock","Not sure"],key:'lockType'},{q:"Is this urgent?",opts:["Yes - locked out now","Today","Can schedule"],key:'urgency'},{q:"Your name?",input:true,key:'name',placeholder:'John Smith'},{q:"Your phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'},{q:"Service address?",input:true,key:'address',placeholder:'123 Main St, City, State'}],build:function(a){var u=a.urgency==="Yes - locked out now"?"EMERGENCY":a.urgency==="Today"?"Today":"Scheduled";return "RESIDENTIAL LOCKSMITH REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nAddress: "+a.address+"\nSituation: "+a.situation+"\nLock type: "+a.lockType+"\nUrgency: "+u+"\n\nPlease contact me to confirm."}},
+  comm:{steps:[{q:"What type of business?",opts:["Office","Warehouse","Retail","Medical","School/Church","Other commercial"],key:'bizType'},{q:"What's needed?",opts:["Master key system","Rekey multiple doors","Panic hardware service","New door hardware install","Access control","Consultation"],key:'service'},{q:"Approx number of doors?",opts:["1-5","6-15","16-30","30+"],key:'doors'},{q:"Your name / company?",input:true,key:'name',placeholder:'Company name'},{q:"Best phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'},{q:"Business address?",input:true,key:'address',placeholder:'456 Business Ave'}],build:function(a){return "COMMERCIAL SERVICE REQUEST\n\nCompany: "+a.name+"\nPhone: "+a.phone+"\nAddress: "+a.address+"\nBusiness type: "+a.bizType+"\nService: "+a.service+"\nDoors: "+a.doors+"\n\nPlease contact me to schedule a walkthrough."}},
+  auto:{steps:[{q:"What's the situation?",opts:["Locked out of car","Lost all keys","Key broke in ignition","Need new fob","Trunk locked","Other"],key:'situation'},{q:"Vehicle year?",input:true,key:'year',placeholder:'2020'},{q:"Vehicle make & model?",input:true,key:'make',placeholder:'Toyota Camry'},{q:"Where's the vehicle?",opts:["At home","Parking lot","Store parking","Street side","Other location"],key:'location'},{q:"Your name?",input:true,key:'name',placeholder:'John Smith'},{q:"Your phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'}],build:function(a){return "AUTOMOTIVE SERVICE REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nVehicle: "+a.year+" "+a.make+"\nSituation: "+a.situation+"\nLocation: "+a.location+"\n\nPlease contact me."}},
+  safe:{steps:[{q:"What kind of safe?",opts:["Home / gun safe","Commercial safe","TL / high security","Antique / vintage","Floor / wall safe","Jewelry chest"],key:'type'},{q:"What's the issue?",opts:["Won't open / locked out","Dial spins freely","Digital keypad dead","Combo forgotten","Handle broken","Won't lock"],key:'issue'},{q:"Brand (if known)?",input:true,key:'brand',placeholder:'AMSEC, Gardall, Liberty, etc.'},{q:"Approx age?",opts:["New (0-5 yrs)","Modern (5-20)","Vintage (20-50)","Antique (50+)","Unknown"],key:'age'},{q:"Your name?",input:true,key:'name',placeholder:'John Smith'},{q:"Your phone number?",input:true,key:'phone',placeholder:'(555) 123-4567'}],build:function(a){return "SAFE SERVICE REQUEST\n\nClient: "+a.name+"\nPhone: "+a.phone+"\nSafe type: "+a.type+"\nBrand: "+a.brand+"\nAge: "+a.age+"\nIssue: "+a.issue+"\n\nPlease contact me."}}
 };
 var state={};
 function startFlow(key){state[key]={answers:{},step:0};renderStep(key);}
@@ -817,10 +834,10 @@ function showResult(key){
   var email=settings.email||'';
   var country=settings.country||'1';
   var fullPhone='+'+country+phone.replace(/[^\d]/g,'');
-  el.innerHTML='<h3>✅ Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div><div class="send-links">'+
-    (phone?'<a href="sms:'+fullPhone+'&body='+encodeURIComponent(msg)+'">📱 Send via Text</a>':'')+
-    (email?'<a class="email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">📧 Send via Email</a>':'')+
-    '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">🔄 Start Over</button>';
+  el.innerHTML='<h3>Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div><div class="send-links">'+
+    (phone?'<a href="sms:'+fullPhone+'&body='+encodeURIComponent(msg)+'">Send via Text</a>':'')+
+    (email?'<a class="email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">Send via Email</a>':'')+
+    '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">Start Over</button>';
   el.classList.add('show');document.getElementById(key+'Opts').style.display='none';document.getElementById(key+'Input').style.display='none';document.getElementById(key+'Nav').innerHTML='';
 }
 loadSettings();
