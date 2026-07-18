@@ -322,6 +322,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <label>Logo image URL (optional)</label><input type="text" id="setLogo" placeholder="https://your-site.com/logo.png">
 <label>Font size</label>
 <select id="setFontSize"><option value="14px">Small</option><option value="16px" selected>Default</option><option value="18px">Large</option></select>
+<div class="section-title">🔧 Services You Offer</div>
+<p style="color:var(--muted);font-size:11px;margin-bottom:6px">Check the services you provide. Clients only see what you offer.</p>
+<div id="settingsServices"></div>
 <div class="section-title">🔒 Change PIN</div>
 <label>New PIN (4-6 digits — leave blank to keep current)</label>
 <input type="password" id="setNewPin" maxlength="6" inputmode="numeric" pattern="[0-9]*" placeholder="Leave blank to keep current">
@@ -351,6 +354,12 @@ function sha256(str){
 var defaultSettings = {
   bizName:'Frantz Locksmith Service',phone:'',email:'',country:'1',
   tabs:{resi:true,comm:true,auto:true,safe:true},
+  services:{
+    resi:["Locked out","Need rekey","Lock repair","New install","Keys need duplication"],
+    comm:["Office","Warehouse","Retail","Medical","School/Church","Other commercial"],
+    auto:["Locked out of car","Lost all keys","Key broke in ignition","Need new fob","Trunk locked","Other"],
+    safe:["Home / gun safe","Commercial safe","TL / high security","Antique / vintage","Floor / wall safe","Jewelry chest"]
+  },
   accent:'#58a6ff',accent2:'#f0883e',bg:'#0d1117',bgImg:'',logo:'',fontSize:'16px',pinHash:''
 };
 var settings = {};
@@ -535,6 +544,47 @@ function updateSettingsDrawer(){
   document.getElementById('setBgImg').value=s.bgImg||'';
   document.getElementById('setLogo').value=s.logo||'';
   document.getElementById('setFontSize').value=s.fontSize;
+  // Populate service checkboxes
+  var ss=document.getElementById('settingsServices');
+  if(ss){
+    ss.innerHTML='';
+    var labels={resi:'Residential',comm:'Commercial',auto:'Automotive',safe:'Safe'};
+    for(var sk in labels){
+      if(!s.tabs[sk])continue;
+      var sv=s.services[sk]||[];
+      var div=document.createElement('div');
+      div.style.margin='6px 0';
+      var h=document.createElement('div');
+      h.style.cssText='font-size:12px;color:var(--accent2);margin-bottom:4px';
+      h.textContent=labels[sk];
+      div.appendChild(h);
+      var allOptions=[];
+      if(sk==='resi')allOptions=["Locked out","Need rekey","Lock repair","New install","Keys need duplication"];
+      else if(sk==='comm')allOptions=["Master key system","Rekey multiple doors","Panic hardware service","New door hardware install","Access control","Consultation"];
+      else if(sk==='auto')allOptions=["Locked out of car","Lost all keys","Key broke in ignition","Need new fob","Trunk locked","Other"];
+      else if(sk==='safe')allOptions=["Home / gun safe","Commercial safe","TL / high security","Antique / vintage","Floor / wall safe","Jewelry chest","Won't open","Dial spins freely","Digital keypad dead","Combo forgotten","Handle broken","Won't lock"];
+      for(var si=0;si<allOptions.length;si++){
+        var opt=allOptions[si];
+        var cb=document.createElement('label');
+        cb.style.cssText='display:inline-flex;align-items:center;gap:4px;margin:2px 6px 2px 0;font-size:12px;color:var(--text);cursor:pointer';
+        var inp=document.createElement('input');
+        inp.type='checkbox';
+        inp.checked=sv.indexOf(opt)>-1;
+        inp.style.accentColor='var(--accent)';
+        inp.onchange=function(serviceKey,optionName,chk){return function(){
+          if(!s.services[serviceKey])s.services[serviceKey]=[];
+          var arr=s.services[serviceKey];
+          if(chk.checked){if(arr.indexOf(optionName)===-1)arr.push(optionName);}
+          else{var idx=arr.indexOf(optionName);if(idx>-1)arr.splice(idx,1);}
+          saveSettings();
+        };}(sk,opt,inp);
+        cb.appendChild(inp);
+        cb.appendChild(document.createTextNode(opt));
+        div.appendChild(cb);
+      }
+      ss.appendChild(div);
+    }
+  }
   document.getElementById('setNewPin').value='';
   document.getElementById('setNewPinConfirm').value='';
 }
@@ -607,7 +657,13 @@ function renderStep(key){
   var oe=document.getElementById(key+'Opts'),ie=document.getElementById(key+'Input'),ne=document.getElementById(key+'Nav');
   if(step.opts){
     oe.style.display='flex';ie.style.display='none';
-    oe.innerHTML=step.opts.map(function(o){return '<div class="flow-btn" onclick="answer(\''+key+'\',\''+o.replace(/'/g,"\\'")+'\')"><span class="icon">→</span> '+o+'</div>';}).join('');
+    // Filter options by locksmith's selected services (first step of each flow)
+    var validOpts=step.opts;
+    if(s.step===0&&settings.services&&settings.services[key]){
+      var svc=settings.services[key];
+      if(svc&&svc.length>0)validOpts=step.opts.filter(function(o){return svc.indexOf(o)>-1;});
+    }
+    oe.innerHTML=validOpts.map(function(o){return '<div class="flow-btn" onclick="answer(\''+key+'\',\''+o.replace(/'/g,"\\'")+'\')"><span class="icon">→</span> '+o+'</div>';}).join('');
   }else if(step.input){
     oe.style.display='none';ie.style.display='block';
     var ph=step.placeholder||'',val=s.answers[step.key]||'';
@@ -629,8 +685,25 @@ function showResult(key){
   el.innerHTML='<h3>Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div><div class="send-links">'+
     (phone?'<a href="sms:'+fullPhone+'&body='+encodeURIComponent(msg)+'">Send via Text</a>':'')+
     (email?'<a class="email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">Send via Email</a>':'')+
-    '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">Start Over</button>';
+    '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">Start Over</button>'+
+    '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><p style="color:var(--muted);font-size:12px;margin-bottom:6px">Also need another service?</p><div id="addServiceBtns"></div></div>';
   el.classList.add('show');document.getElementById(key+'Opts').style.display='none';document.getElementById(key+'Input').style.display='none';document.getElementById(key+'Nav').innerHTML='';
+  // Build "Add another service" buttons (only tabs that are enabled)
+  var asb=document.getElementById('addServiceBtns');
+  if(asb){
+    asb.innerHTML='';
+    var cats={resi:'Residential',comm:'Commercial',auto:'Automotive',safe:'Safe'};
+    for(var ck in cats){
+      if(ck===key||!settings.tabs[ck])continue;
+      (function(kk){
+        var btn=document.createElement('button');
+        btn.style.cssText='background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:12px;color:var(--text);margin:3px';
+        btn.textContent=cats[ck];
+        btn.onclick=function(){startFlow(kk);};
+        asb.appendChild(btn);
+      })(ck);
+    }
+  }
 }
 loadSettings();
 var h=location.hash.replace('#','');
