@@ -367,6 +367,8 @@ var drawerUnlocked = false;
 
 function loadSettings(){
   try{var s=localStorage.getItem('lockcmd_settings');settings=s?JSON.parse(s):JSON.parse(JSON.stringify(defaultSettings));}catch(e){settings=JSON.parse(JSON.stringify(defaultSettings));}
+  // Migrate old settings that lack services
+  if(!settings.services)settings.services=JSON.parse(JSON.stringify(defaultSettings.services));
   if(!settings.pinHash){
     document.getElementById('setupOverlay').classList.remove('hidden');
     initSetupTabs();
