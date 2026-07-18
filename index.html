@@ -460,6 +460,15 @@ function skipSetup(){
 }
 function finishSetup(){
   drawerUnlocked=true;
+  // Re-read all wizard fields to make sure nothing is lost
+  var ps=document.getElementById('setupPhone');
+  var em=document.getElementById('setupEmail');
+  if(ps&&ps.value.trim())settings.phone=ps.value.trim();
+  if(em&&em.value.trim())settings.email=em.value.trim();
+  var sc=document.getElementById('setupCountry');
+  if(sc)settings.country=sc.value;
+  var bn=document.getElementById('setupBizName');
+  if(bn&&bn.value.trim())settings.bizName=bn.value.trim();
   saveSettings();
   document.getElementById('setupOverlay').classList.add('hidden');
   document.getElementById('gearBtn').classList.add('show');
