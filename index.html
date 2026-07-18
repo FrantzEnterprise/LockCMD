@@ -548,7 +548,7 @@ function updateSettingsDrawer(){
   document.getElementById('setFontSize').value=s.fontSize;
   // Populate service checkboxes
   var ss=document.getElementById('settingsServices');
-  if(ss){
+  if(ss&&s.services){
     ss.innerHTML='';
     var labels={resi:'Residential',comm:'Commercial',auto:'Automotive',safe:'Safe'};
     for(var sk in labels){
