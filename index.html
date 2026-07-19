@@ -117,7 +117,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .drawer{width:100vw;max-width:100vw;right:-100vw}
   .setup-box{padding:20px}
 }
-.confirm-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:12px 28px;cursor:pointer;font-size:15px;font-weight:600;font-family:var(--font);width:100%;margin-top:6px;transition:opacity .2s}.confirm-btn:hover{opacity:.85}.send-btn{display:inline-block;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px 18px;cursor:pointer;font-size:13px;font-family:var(--font);text-decoration:none;margin:4px;transition:background .2s}.send-btn:hover{background:var(--border)}.overlay-confirm{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:1000}.confirm-dialog{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:380px;width:90%;text-align:center}.confirm-dialog h3{color:var(--accent2);margin:0 0 8px}.confirm-dialog p{color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.5}.confirm-dialog .ok-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-size:14px;font-weight:600;font-family:var(--font)}</style>
+</style>
 </head>
 <body>
 
@@ -204,7 +204,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 1: PIN -->
   <div class="setup-step" id="setupStep1" style="display:none">
-    <div class="step-ind">Step 1 of 8</div>
+    <div class="step-ind">Step 1 of 7</div>
     <h2>Create a PIN</h2>
     <p>This PIN locks the settings so customers can't change your config. 4-6 digits.</p>
     <div class="pin-input"><input type="password" id="setupPin" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="****"></div>
@@ -217,7 +217,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 2: Business name -->
   <div class="setup-step" id="setupStep2" style="display:none">
-    <div class="step-ind">Step 2 of 8</div>
+    <div class="step-ind">Step 2 of 7</div>
     <h2>Your Business Name</h2>
     <p>This appears in the top bar so customers know who they're contacting.</p>
     <label>Business name</label>
@@ -228,7 +228,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 3: Which services -->
   <div class="setup-step" id="setupStep3" style="display:none">
-    <div class="step-ind">Step 3 of 8</div>
+    <div class="step-ind">Step 3 of 7</div>
     <h2>Which Services Do You Offer?</h2>
     <p>Toggle the tabs you want customers to see. Turn off anything you don't do.</p>
     <div class="toggle-group" id="setupTabs"></div>
@@ -238,7 +238,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 4: Colors -->
   <div class="setup-step" id="setupStep4" style="display:none">
-    <div class="step-ind">Step 4 of 8</div>
+    <div class="step-ind">Step 4 of 7</div>
     <h2>Brand Colors</h2>
     <p>Match LockCMD to your website. Pick colors or keep the defaults.</p>
     <label>Accent color (main)</label>
@@ -253,7 +253,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 5: Logo & Background Image -->
   <div class="setup-step" id="setupStep5" style="display:none">
-    <div class="step-ind">Step 5 of 8</div>
+    <div class="step-ind">Step 5 of 7</div>
     <h2>Logo & Background</h2>
     <p>Optional — add a logo URL and a background image URL.</p>
     <label>Logo URL <span style="color:var(--muted)">(optional)</span></label>
@@ -266,22 +266,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 6: Contact Info -->
   <div class="setup-step" id="setupStep6" style="display:none">
-    <div class="step-ind">Step 6 of 8</div>
-    <h2>💰 Set Your Pricing</h2>
-    <p>Enter your trip fee, service area, and per-service prices (price field shown next to each service). Parts/materials quoted at time of service.</p>
-    <label>Trip fee (within service area) — $</label>
-    <input type="number" id="setupTripFee" placeholder="65" min="0" step="5" style="width:100px" value="65">
-    <label>Service area radius (miles)</label>
-    <input type="number" id="setupRadius" placeholder="20" min="0" step="5" style="width:100px" value="20">
-    <label>Mileage rate ($ per mile over radius)</label>
-    <input type="number" id="setupMileRate" placeholder="2" min="0" step="0.5" style="width:100px" value="2">
-    <label style="margin-top:10px;font-size:12px;color:var(--accent2)">Per-service prices</label>
-    <div id="setupPrices" style="margin-top:4px"></div>
-    <button class="nav-btn" onclick="setupNext(7)">Next -></button>
-    <button class="nav-btn secondary" onclick="setupPrev(5)"><- Back</button>
-  </div>
-  <div class="setup-step" id="setupStep7" style="display:none">
-    <div class="step-ind">Step 7 of 8</div>
+    <div class="step-ind">Step 6 of 7</div>
     <h2>Your Contact Info</h2>
     <p>This phone and email go into the SMS/email links at the end of each flow.</p>
     <label>Your phone number <span style="color:var(--muted)">(for SMS)</span></label>
@@ -290,17 +275,19 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <option value="1">🇺🇸 +1</option>
         <option value="44">🇬🇧 +44</option>
         <option value="61">🇦🇺 +61</option>
+        <option value="55">🇧🇷 +55</option>
+        <option value="1-876">🇯🇲 +1-876</option>
       </select>
       <input type="tel" id="setupPhone" placeholder="(555) 123-4567" style="flex:1">
     </div>
     <label>Your email <span style="color:var(--muted)">(for email links)</span></label>
     <input type="email" id="setupEmail" placeholder="you@locksmith.com">
-    <button class="nav-btn" onclick="setupNext(8)">Next →</button>
-    <button class="nav-btn secondary" onclick="setupPrev(6)">← Back</button>
+    <button class="nav-btn" onclick="setupNext(7)">Next →</button>
+    <button class="nav-btn secondary" onclick="setupPrev(5)">← Back</button>
   </div>
 
   <!-- Step 7: Done -->
-  <div class="setup-step" id="setupStep8" style="display:none">
+  <div class="setup-step" id="setupStep7" style="display:none">
     <div class="welcome">
       <div class="big-icon">✅</div>
       <h2>All Set!</h2>
@@ -335,14 +322,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <label>Logo image URL (optional)</label><input type="text" id="setLogo" placeholder="https://your-site.com/logo.png">
 <label>Font size</label>
 <select id="setFontSize"><option value="14px">Small</option><option value="16px" selected>Default</option><option value="18px">Large</option></select>
-<div class="section-title">💰 Trip & Mileage</div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
-<label style="font-size:12px;color:var(--text)">Trip fee $ <input type="number" id="setTripFee" placeholder="65" min="0" step="5" style="width:70px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);font-family:var(--font)" onchange="savePricing()"></label>
-<label style="font-size:12px;color:var(--text)">Radius (mi) <input type="number" id="setRadius" placeholder="20" min="0" step="5" style="width:60px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);font-family:var(--font)" onchange="savePricing()"></label>
-<label style="font-size:12px;color:var(--text)">$/mi beyond <input type="number" id="setMileRate" placeholder="2" min="0" step="0.5" style="width:60px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);font-family:var(--font)" onchange="savePricing()"></label>
-</div>
 <div class="section-title">🔧 Services You Offer</div>
-<p style="color:var(--muted);font-size:11px;margin-bottom:6px">Check services you provide and set price per service. Parts/materials quoted at time of service.</p>
 <p style="color:var(--muted);font-size:11px;margin-bottom:6px">Check the services you provide. Clients only see what you offer.</p>
 <div id="settingsServices"></div>
 <div class="section-title">🔒 Change PIN</div>
@@ -363,7 +343,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
 <script>
 /* ==============================
-   SETTINGS & SETUP — v3
+   SETTINGS & SETUP
    ============================== */
 /* Simple PIN hash */
 function sha256(str){
@@ -379,13 +359,6 @@ var defaultSettings = {
     comm:["Office","Warehouse","Retail","Medical","School/Church","Other commercial"],
     auto:["Locked out of car","Lost all keys","Key broke in ignition","Need new fob","Trunk locked","Other"],
     safe:["Home / gun safe","Commercial safe","TL / high security","Antique / vintage","Floor / wall safe","Jewelry chest"]
-  },
-  tripFee:65,serviceRadius:20,mileageRate:2,
-  prices:{
-    resi:{"Locked out":85,"Need rekey":45,"Lock repair":65,"New install":95,"Keys need duplication":15},
-    comm:{"Office":75,"Warehouse":95,"Retail":85,"Medical":85,"School/Church":85,"Other commercial":85},
-    auto:{"Locked out of car":85,"Lost all keys":120,"Key broke in ignition":150,"Need new fob":175,"Trunk locked":85,"Other":65},
-    safe:{"Home / gun safe":195,"Commercial safe":295,"TL / high security":395,"Antique / vintage":250,"Floor / wall safe":225,"Jewelry chest":195}
   },
   accent:'#58a6ff',accent2:'#f0883e',bg:'#0d1117',bgImg:'',logo:'',fontSize:'16px',pinHash:''
 };
@@ -410,37 +383,6 @@ function saveSettings(){
   applySettings();
 }
 
-function savePricing(){
-  settings.tripFee=parseFloat(document.getElementById('setTripFee').value)||0;
-  settings.serviceRadius=parseFloat(document.getElementById('setRadius').value)||0;
-  settings.mileageRate=parseFloat(document.getElementById('setMileRate').value)||0;
-  saveSettings();
-}
-function buildEstimate(key){
-  var ans=state[key]&&state[key].answers;
-  if(!ans)return null;
-  var f=flows[key];
-  if(!f||!f.steps.length)return null;
-  var firstKey=f.steps[0].key;
-  var selectedService=ans[firstKey];
-  if(!selectedService)return null;
-  var priceMap=settings.prices&&settings.prices[key];
-  var servicePrice=priceMap?priceMap[selectedService]:null;
-  if(servicePrice===undefined||servicePrice===null)return null;
-  var tripFee=settings.tripFee||0;
-  var total=tripFee+servicePrice;
-  var lines='--- ESTIMATE ---\n';
-  lines+='Service call: $'+tripFee.toFixed(2)+'\n';
-  lines+=selectedService+': $'+servicePrice.toFixed(2)+'\n';
-  if(settings.mileageRate>0&&settings.serviceRadius>0){
-    lines+='Mileage: included within '+settings.serviceRadius+' mi\n';
-    lines+='  $'+settings.mileageRate.toFixed(2)+'/mi beyond radius\n';
-  }
-  lines+='---\n';
-  lines+='Total est: $'+total.toFixed(2)+'\n';
-  lines+='Parts not included \u2014 quoted at time of service.';
-  return {total:total,service:selectedService,price:servicePrice,text:lines};
-}
 function applySettings(){
   var s=settings;
   document.querySelectorAll('.tab-bar .tab').forEach(function(t){var k=t.getAttribute('data-tab');if(s.tabs[k])t.classList.remove('hidden');else{t.classList.add('hidden');t.classList.remove('active');}});
@@ -503,48 +445,6 @@ function setupNext(n){
       saveSettings();
     }
     if(n===6){
-      // Populate pricing in wizard from current settings
-      var spEl=document.getElementById('setupPrices');
-      if(spEl&&settings.prices){
-        spEl.innerHTML='';
-        for(var sk in settings.tabs){
-          if(!settings.tabs[sk])continue;
-          var pMap=settings.prices[sk]||{};
-          var sec=document.createElement('div');
-          sec.style.margin='4px 0';
-          var hd=document.createElement('div');
-          hd.style.cssText='font-size:11px;color:var(--accent2);margin:4px 0 2px';
-          hd.textContent={resi:'Residential',comm:'Commercial',auto:'Automotive',safe:'Safe'}[sk];
-          sec.appendChild(hd);
-          for(var opt in pMap){
-            var r=document.createElement('div');
-            r.style.cssText='display:flex;align-items:center;gap:6px;margin:2px 0';
-            var l=document.createElement('span');
-            l.style.cssText='font-size:12px;color:var(--text);flex:1';
-            l.textContent=opt;
-            var inp=document.createElement('input');
-            inp.type='number';
-            inp.value=pMap[opt];
-            inp.dataset.sk=sk;
-            inp.dataset.opt=opt;
-            inp.style.cssText='width:70px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);text-align:right';
-            inp.min=0;inp.step=5;
-            r.appendChild(l);
-            r.appendChild(document.createTextNode('$'));
-            r.appendChild(inp);
-            sec.appendChild(r);
-          }
-          spEl.appendChild(sec);
-        }
-      }
-      if(document.getElementById('setupTripFee')&&settings.tripFee!==undefined)
-        document.getElementById('setupTripFee').value=settings.tripFee;
-      if(document.getElementById('setupRadius')&&settings.serviceRadius!==undefined)
-        document.getElementById('setupRadius').value=settings.serviceRadius;
-      if(document.getElementById('setupMileRate')&&settings.mileageRate!==undefined)
-        document.getElementById('setupMileRate').value=settings.mileageRate;
-    }
-    if(n===7){
       settings.phone=document.getElementById('setupPhone').value.trim();
       settings.email=document.getElementById('setupEmail').value.trim();
       settings.country=document.getElementById('setupCountry').value;
@@ -563,11 +463,6 @@ function setupPrev(n){
 }
 function skipSetup(){
   settings.pinHash=sha256('0000');
-  // Apply default pricing
-  if(!settings.prices)settings.prices=JSON.parse(JSON.stringify(defaultSettings.prices));
-  settings.tripFee=settings.tripFee||65;
-  settings.serviceRadius=settings.serviceRadius||20;
-  settings.mileageRate=settings.mileageRate||2;
   localStorage.setItem('lockcmd_settings',JSON.stringify(settings));
   drawerUnlocked=true;
   document.getElementById('setupOverlay').classList.add('hidden');
@@ -585,23 +480,6 @@ function finishSetup(){
   if(sc)settings.country=sc.value;
   var bn=document.getElementById('setupBizName');
   if(bn&&bn.value.trim())settings.bizName=bn.value.trim();
-  // Save pricing from setup wizard
-  var tf=document.getElementById('setupTripFee');
-  if(tf)settings.tripFee=parseFloat(tf.value)||0;
-  var sr=document.getElementById('setupRadius');
-  if(sr)settings.serviceRadius=parseFloat(sr.value)||0;
-  var mr=document.getElementById('setupMileRate');
-  if(mr)settings.mileageRate=parseFloat(mr.value)||0;
-  var spEls=document.querySelectorAll('#setupPrices input[type="number"]');
-  spEls.forEach(function(inp){
-    var sk=inp.dataset.sk;
-    var opt=inp.dataset.opt;
-    if(sk&&opt){
-      if(!settings.prices)settings.prices={};
-      if(!settings.prices[sk])settings.prices[sk]={};
-      settings.prices[sk][opt]=parseFloat(inp.value)||0;
-    }
-  });
   saveSettings();
   document.getElementById('setupOverlay').classList.add('hidden');
   document.getElementById('gearBtn').classList.add('show');
@@ -668,10 +546,6 @@ function updateSettingsDrawer(){
   document.getElementById('setBgImg').value=s.bgImg||'';
   document.getElementById('setLogo').value=s.logo||'';
   document.getElementById('setFontSize').value=s.fontSize;
-  // Populate trip fee/mileage fields
-  if(document.getElementById('setTripFee'))document.getElementById('setTripFee').value=s.tripFee||0;
-  if(document.getElementById('setRadius'))document.getElementById('setRadius').value=s.serviceRadius||0;
-  if(document.getElementById('setMileRate'))document.getElementById('setMileRate').value=s.mileageRate||0;
   // Populate service checkboxes
   var ss=document.getElementById('settingsServices');
   if(ss&&s.services){
@@ -708,23 +582,6 @@ function updateSettingsDrawer(){
         };}(sk,opt,inp);
         cb.appendChild(inp);
         cb.appendChild(document.createTextNode(opt));
-        var priceSp=document.createElement('span');
-        priceSp.style.cssText='color:var(--muted);margin-left:2px';
-        priceSp.textContent=' $';
-        cb.appendChild(priceSp);
-        var priceInp=document.createElement('input');
-        priceInp.type='number';
-        priceInp.style.cssText='width:52px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1px 3px;font-size:11px;color:var(--text);text-align:right;font-family:var(--font)';
-        priceInp.min=0;priceInp.step=5;
-        var pmap=s.prices&&s.prices[sk];
-        priceInp.value=pmap&&pmap[opt]!==undefined?pmap[opt]:0;
-        priceInp.onchange=function(serviceKey,optionName,inp2){return function(){
-          if(!s.prices)s.prices={};
-          if(!s.prices[serviceKey])s.prices[serviceKey]={};
-          s.prices[serviceKey][optionName]=parseFloat(inp2.value)||0;
-          saveSettings();
-        };}(sk,opt,priceInp);
-        cb.appendChild(priceInp);
         div.appendChild(cb);
       }
       ss.appendChild(div);
@@ -824,20 +681,17 @@ function answerInput(key){var f=flows[key],s=state[key],step=f.steps[s.step];var
 function back(key){var s=state[key];if(s.step>0){s.step--;renderStep(key);}}
 function showResult(key){
   var f=flows[key],s=state[key],msg=f.build(s.answers),el=document.getElementById(key+'Result'),subj="LockCMD: "+key.toUpperCase()+" Service Request";
-  var phone=settings.phone||'',email=settings.email||'';
+  var phone=settings.phone||'';
   var country=settings.country||'1';
   var fullPhone='+'+country+phone.replace(/[^\d]/g,'');
-  var biz=settings.bizName||'your locksmith';
-  var estBlock=(function(){var e=buildEstimate(key);return e?'<div class="msg" style="border-left:3px solid var(--accent2);margin-top:10px"><strong style="color:var(--accent2)">💰 Estimate</strong><br>'+e.text.replace(/\n/g,'<br>')+'</div>':'';})();
-  el.innerHTML='<h3>✅ Done! Your information is ready</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div>'+estBlock+'<div class="send-links">'+
-    (phone?'<a class="send-btn" href="sms:'+fullPhone+'?body='+encodeURIComponent(msg)+'">📱 Send via Text</a>':'')+
-    (email?'<a class="send-btn email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">📧 Send via Email</a>':'')+
-    '</div>'+
-    '<div style="text-align:center;margin-top:12px"><button class="confirm-btn" onclick="sendAndConfirm(''+key+'')">✅ Confirm & Send Request</button></div>'+
-    '<div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border)"><p style="color:var(--muted);font-size:12px;margin-bottom:6px">Also need another service?</p><div id="addServiceBtns"></div></div>'+
-    '<div style="margin-top:8px"><button class="reset-btn" onclick="startFlow(''+key+'')">🔄 Start Over</button></div>';
+  var email=settings.email||'';
+  el.innerHTML='<h3>Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div><div class="send-links">'+
+    (phone?'<a href="sms:'+fullPhone+'?body='+encodeURIComponent(msg)+'">Send via Text</a><button style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:8px 16px;cursor:pointer;color:var(--muted);font-size:12px;" onclick="copyMsg(\''+key+'\')">Copy</button>':'')+
+    (email?'<a class="email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">Send via Email</a>':'')+
+    '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">Start Over</button>'+
+    '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><p style="color:var(--muted);font-size:12px;margin-bottom:6px">Also need another service?</p><div id="addServiceBtns"></div></div>';
   el.classList.add('show');document.getElementById(key+'Opts').style.display='none';document.getElementById(key+'Input').style.display='none';document.getElementById(key+'Nav').innerHTML='';
-  // Build "Add another service" buttons
+  // Build "Add another service" buttons (only tabs that are enabled)
   var asb=document.getElementById('addServiceBtns');
   if(asb){
     asb.innerHTML='';
@@ -853,40 +707,14 @@ function showResult(key){
       })(ck);
     }
   }
-}function sendAndConfirm(key){
-  var f=flows[key],s=state[key],msg=f.build(s.answers);
-  var phone=settings.phone||'',email=settings.email||'';
-  var country=settings.country||'1';
-  var fullPhone='+'+country+phone.replace(/[^\d]/g,'');
-  var subj="LockCMD: "+key.toUpperCase()+" Service Request";
-  var biz=settings.bizName||'the technician';
-  if(phone) window.open('sms:'+fullPhone+'?body='+encodeURIComponent(msg),'_blank');
-  if(email) window.open('mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg),'_blank');
-  var div=document.createElement('div');
-  div.className='overlay-confirm';
-  div.id='confirmOverlay';
-  div.innerHTML='<div class="confirm-dialog"><h3>✅ Request Sent!</h3><p>Your request and estimate have been sent to '+biz+'.<br><br><strong>'+biz+' will call you back ASAP to schedule your appointment.</strong></p><button class="ok-btn" onclick="dismissConfirm()">OK, got it</button></div>';
-  document.body.appendChild(div);
-}
-function dismissConfirm(){
-  var el=document.getElementById('confirmOverlay');
-  if(el)el.remove();
 }
 function copyMsg(key){
   var msg=flows[key].build(state[key].answers);
   if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){alert('Message copied to clipboard!');}).catch(function(){prompt('Copy this message:',msg);});}else{prompt('Copy this message:',msg);}
 }
-// Wrap in try/catch for mobile compatibility
-try{
-  loadSettings();
-  var h=location.hash.replace('#','');
-  if(h&&document.getElementById('panel-'+h)){switchTab(h);}else{switchTab('resi');}
-}catch(e){
-  console.error('LockCMD init error:',e);
-  // Still show the setup overlay if init failed
-  var so=document.getElementById('setupOverlay');
-  if(so)so.classList.remove('hidden');
-}
+loadSettings();
+var h=location.hash.replace('#','');
+if(h&&document.getElementById('panel-'+h)){switchTab(h);}else{switchTab('resi');}
 </script>
 </body>
 </html>
