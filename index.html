@@ -686,7 +686,7 @@ function showResult(key){
   var fullPhone='+'+country+phone.replace(/[^\d]/g,'');
   var email=settings.email||'';
   el.innerHTML='<h3>Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div><div class="send-links">'+
-    (phone?'<a href="sms:'+fullPhone+'&body='+encodeURIComponent(msg)+'">Send via Text</a>':'')+
+    (phone?'<a href="sms:'+fullPhone+'&body='+encodeURIComponent(msg)+'">Send via Text</a><button style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:8px 16px;cursor:pointer;color:var(--muted);font-size:12px;" onclick="copyMsg(\''+key+'\')">Copy</button>':'')+
     (email?'<a class="email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">Send via Email</a>':'')+
     '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">Start Over</button>'+
     '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><p style="color:var(--muted);font-size:12px;margin-bottom:6px">Also need another service?</p><div id="addServiceBtns"></div></div>';
@@ -707,6 +707,10 @@ function showResult(key){
       })(ck);
     }
   }
+}
+function copyMsg(key){
+  var msg=flows[key].build(state[key].answers);
+  if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){alert('Message copied to clipboard!');}).catch(function(){prompt('Copy this message:',msg);});}else{prompt('Copy this message:',msg);}
 }
 loadSettings();
 var h=location.hash.replace('#','');
