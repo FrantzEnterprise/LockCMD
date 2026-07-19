@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LockCMD — Test</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1117;color:#e6edf3;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.test-box{background:#161b22;border:1px solid #58a6ff;border-radius:12px;padding:28px;max-width:400px;width:90%;text-align:center}
+h2{color:#f0883e;margin-bottom:12px}
+p{color:#8b949e;font-size:13px;margin-bottom:16px}
+button{width:100%;background:#58a6ff;color:#0d1117;border:none;padding:12px;border-radius:8px;font-weight:600;font-size:15px;cursor:pointer;margin-top:12px}
+button.secondary{background:transparent;border:1px solid #30363d;color:#8b949e}
+.msg{color:#3fb950;font-size:13px;margin-top:12px;display:none}
+</style>
+</head>
+<body>
+<div class="test-box">
+  <div style="font-size:48px;margin-bottom:10px">🔧</div>
+  <h2>LockCMD Test Page</h2>
+  <p>This is a simplified test. Click buttons below to test JS execution.</p>
+  <button onclick="testOne()">Get Started →</button>
+  <button class="secondary" onclick="testTwo()" style="margin-top:8px">Skip — use defaults</button>
+  <a href="help.html" target="_blank" style="display:block;color:#8b949e;font-size:12px;margin-top:12px">View Setup Guide</a>
+  <div class="msg" id="result"></div>
+</div>
+<script>
+function testOne(){
+  document.getElementById('result').textContent = '✓ Get Started clicked! JavaScript is working.';
+  document.getElementById('result').style.display = 'block';
+}
+function testTwo(){
+  document.getElementById('result').textContent = '✓ Skip clicked! JavaScript is working.';
+  document.getElementById('result').style.display = 'block';
+}
+</script>
+</body>
+</html>
