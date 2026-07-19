@@ -322,14 +322,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <label>Logo image URL (optional)</label><input type="text" id="setLogo" placeholder="https://your-site.com/logo.png">
 <label>Font size</label>
 <select id="setFontSize"><option value="14px">Small</option><option value="16px" selected>Default</option><option value="18px">Large</option></select>
-"'<div style=\"margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:8px\">'+
-      '<div style=\"display:flex;flex-wrap:wrap;gap:6px;align-items:center\">'+
-        '<label style=\"display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)\">Trip fee $ <input type=\"number\" id=\"setTripFee\" placeholder=\"'+settings.tripFee+'\" min=\"0\" step=\"5\" style=\"width:70px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px\" onchange=\"savePricing()\"></label>'+
-        '<label style=\"display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)\">Radius (mi) <input type=\"number\" id=\"setRadius\" placeholder=\"'+settings.serviceRadius+'\" min=\"0\" step=\"5\" style=\"width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px\" onchange=\"savePricing()\"></label>'+
-        '<label style=\"display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)\">$/mi beyond <input type=\"number\" id=\"setMileRate\" placeholder=\"'+settings.mileageRate+'\" min=\"0\" step=\"0.5\" style=\"width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px\" onchange=\"savePricing()\"></label>'+
-      '</div>'+
-      '<p style=\"color:var(--muted);font-size:11px;margin:4px 0 0\">Trip fee added for addresses within radius. Mileage applies beyond radius.</p>'+
-      '</div>'+
+<div class="section-title">💰 Pricing</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:4px">
+  <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">Trip fee $ <input type="number" id="setTripFee" placeholder="65" min="0" step="5" style="width:70px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>
+  <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">Radius (mi) <input type="number" id="setRadius" placeholder="20" min="0" step="5" style="width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>
+  <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">$/mi beyond <input type="number" id="setMileRate" placeholder="2" min="0" step="0.5" style="width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>
+</div>
+<p style="color:var(--muted);font-size:11px;margin:0 0 6px">Trip fee added for addresses within radius. Mileage applies beyond radius.</p>
 <div class="section-title">🔧 Services You Offer</div>
 <p style="color:var(--muted);font-size:11px;margin-bottom:6px">Check the services you provide. Clients only see what you offer.</p>
 <div id="settingsServices"></div>
@@ -567,6 +566,13 @@ function updateSettingsDrawer(){
   document.getElementById('setBgImg').value=s.bgImg||'';
   document.getElementById('setLogo').value=s.logo||'';
   document.getElementById('setFontSize').value=s.fontSize;
+  // Populate pricing fields
+  if(document.getElementById('setTripFee')&&s.tripFee!==undefined){
+    document.getElementById('setTripFee').value=s.tripFee;
+    document.getElementById('setRadius').value=s.serviceRadius;
+    document.getElementById('setMileRate').value=s.mileageRate;
+  }
+
   // Populate service checkboxes
   var ss=document.getElementById('settingsServices');
   if(ss&&s.services){
@@ -602,7 +608,6 @@ function updateSettingsDrawer(){
           saveSettings();
         };}(sk,opt,inp);
         cb.appendChild(inp);
-        // Price input inline
         var pi=document.createElement('input');
         pi.type='number';pi.min='0';pi.step='5';pi.placeholder='$';
         pi.style.cssText='width:48px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 4px;font-size:11px;text-align:center';
@@ -750,12 +755,4 @@ var h=location.hash.replace('#','');
 if(h&&document.getElementById('panel-'+h)){switchTab(h);}else{switchTab('resi');}
 </script>
 </body>
-</html>'<div style="margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:8px">'+
-      '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">'+
-        '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">Trip fee $ <input type="number" id="setTripFee" placeholder="'+settings.tripFee+'" min="0" step="5" style="width:70px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>'+
-        '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">Radius (mi) <input type="number" id="setRadius" placeholder="'+settings.serviceRadius+'" min="0" step="5" style="width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>'+
-        '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">$/mi beyond <input type="number" id="setMileRate" placeholder="'+settings.mileageRate+'" min="0" step="0.5" style="width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>'+
-      '</div>'+
-      '<p style="color:var(--muted);font-size:11px;margin:4px 0 0">Trip fee added for addresses within radius. Mileage applies beyond radius.</p>'+
-      '</div>'+
-
+</html>
