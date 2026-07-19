@@ -827,9 +827,9 @@ function showResult(key){
     (phone?'<a class="send-btn" href="sms:'+fullPhone+'?body='+encodeURIComponent(msg)+'">📱 Send via Text</a>':'')+
     (email?'<a class="send-btn email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">📧 Send via Email</a>':'')+
     '</div>'+
-    '<div style="text-align:center;margin-top:12px"><button class="confirm-btn" onclick="sendAndConfirm('"+key+"')">✅ Confirm & Send Request</button></div>'+
+    '<div style="text-align:center;margin-top:12px"><button class="confirm-btn" onclick="sendAndConfirm(''+key+'')">✅ Confirm & Send Request</button></div>'+
     '<div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border)"><p style="color:var(--muted);font-size:12px;margin-bottom:6px">Also need another service?</p><div id="addServiceBtns"></div></div>'+
-    '<div style="margin-top:8px"><button class="reset-btn" onclick="startFlow('"+key+"')">🔄 Start Over</button></div>';
+    '<div style="margin-top:8px"><button class="reset-btn" onclick="startFlow(''+key+'')">🔄 Start Over</button></div>';
   el.classList.add('show');document.getElementById(key+'Opts').style.display='none';document.getElementById(key+'Input').style.display='none';document.getElementById(key+'Nav').innerHTML='';
   // Build "Add another service" buttons
   var asb=document.getElementById('addServiceBtns');
