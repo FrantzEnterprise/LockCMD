@@ -268,7 +268,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="setup-step"   <div class="setup-step" id="setupStep6" style="display:none">
     <div class="step-ind">Step 6 of 8</div>
     <h2>💰 Set Your Pricing</h2>
-    <p>Enter your trip fee, service area, and per-service prices. Parts/materials quoted at time of service.</p>
+    <p>Enter your trip fee, service area, and per-service prices (price field shown next to each service). Parts/materials quoted at time of service.</p>
     <label>Trip fee (within service area) — $</label>
     <input type="number" id="setupTripFee" placeholder="65" min="0" step="5" style="width:100px" value="65">
     <label>Service area radius (miles)</label>
@@ -336,7 +336,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <label>Logo image URL (optional)</label><input type="text" id="setLogo" placeholder="https://your-site.com/logo.png">
 <label>Font size</label>
 <select id="setFontSize"><option value="14px">Small</option><option value="16px" selected>Default</option><option value="18px">Large</option></select>
+<div class="section-title">💰 Trip & Mileage</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
+<label style="font-size:12px;color:var(--text)">Trip fee $ <input type="number" id="setTripFee" placeholder="65" min="0" step="5" style="width:70px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);font-family:var(--font)" onchange="savePricing()"></label>
+<label style="font-size:12px;color:var(--text)">Radius (mi) <input type="number" id="setRadius" placeholder="20" min="0" step="5" style="width:60px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);font-family:var(--font)" onchange="savePricing()"></label>
+<label style="font-size:12px;color:var(--text)">$/mi beyond <input type="number" id="setMileRate" placeholder="2" min="0" step="0.5" style="width:60px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);font-family:var(--font)" onchange="savePricing()"></label>
+</div>
 <div class="section-title">🔧 Services You Offer</div>
+<p style="color:var(--muted);font-size:11px;margin-bottom:6px">Check services you provide and set price per service. Parts/materials quoted at time of service.</p>
 <p style="color:var(--muted);font-size:11px;margin-bottom:6px">Check the services you provide. Clients only see what you offer.</p>
 <div id="settingsServices"></div>
 <div class="section-title">🔒 Change PIN</div>
@@ -619,6 +626,10 @@ function updateSettingsDrawer(){
   document.getElementById('setBgImg').value=s.bgImg||'';
   document.getElementById('setLogo').value=s.logo||'';
   document.getElementById('setFontSize').value=s.fontSize;
+  // Populate trip fee/mileage fields
+  if(document.getElementById('setTripFee'))document.getElementById('setTripFee').value=s.tripFee||0;
+  if(document.getElementById('setRadius'))document.getElementById('setRadius').value=s.serviceRadius||0;
+  if(document.getElementById('setMileRate'))document.getElementById('setMileRate').value=s.mileageRate||0;
   // Populate service checkboxes
   var ss=document.getElementById('settingsServices');
   if(ss&&s.services){
@@ -655,6 +666,23 @@ function updateSettingsDrawer(){
         };}(sk,opt,inp);
         cb.appendChild(inp);
         cb.appendChild(document.createTextNode(opt));
+        var priceSp=document.createElement('span');
+        priceSp.style.cssText='color:var(--muted);margin-left:2px';
+        priceSp.textContent=' $';
+        cb.appendChild(priceSp);
+        var priceInp=document.createElement('input');
+        priceInp.type='number';
+        priceInp.style.cssText='width:52px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1px 3px;font-size:11px;color:var(--text);text-align:right;font-family:var(--font)';
+        priceInp.min=0;priceInp.step=5;
+        var pmap=s.prices&&s.prices[sk];
+        priceInp.value=pmap&&pmap[opt]!==undefined?pmap[opt]:0;
+        priceInp.onchange=function(serviceKey,optionName,inp2){return function(){
+          if(!s.prices)s.prices={};
+          if(!s.prices[serviceKey])s.prices[serviceKey]={};
+          s.prices[serviceKey][optionName]=parseFloat(inp2.value)||0;
+          saveSettings();
+        };}(sk,opt,priceInp);
+        cb.appendChild(priceInp);
         div.appendChild(cb);
       }
       ss.appendChild(div);
