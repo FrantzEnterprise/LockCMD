@@ -204,7 +204,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 1: PIN -->
   <div class="setup-step" id="setupStep1" style="display:none">
-    <div class="step-ind">Step 1 of 7</div>
+    <div class="step-ind">Step 1 of 8</div>
     <h2>Create a PIN</h2>
     <p>This PIN locks the settings so customers can't change your config. 4-6 digits.</p>
     <div class="pin-input"><input type="password" id="setupPin" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="****"></div>
@@ -217,7 +217,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 2: Business name -->
   <div class="setup-step" id="setupStep2" style="display:none">
-    <div class="step-ind">Step 2 of 7</div>
+    <div class="step-ind">Step 2 of 8</div>
     <h2>Your Business Name</h2>
     <p>This appears in the top bar so customers know who they're contacting.</p>
     <label>Business name</label>
@@ -228,7 +228,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 3: Which services -->
   <div class="setup-step" id="setupStep3" style="display:none">
-    <div class="step-ind">Step 3 of 7</div>
+    <div class="step-ind">Step 3 of 8</div>
     <h2>Which Services Do You Offer?</h2>
     <p>Toggle the tabs you want customers to see. Turn off anything you don't do.</p>
     <div class="toggle-group" id="setupTabs"></div>
@@ -238,7 +238,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 4: Colors -->
   <div class="setup-step" id="setupStep4" style="display:none">
-    <div class="step-ind">Step 4 of 7</div>
+    <div class="step-ind">Step 4 of 8</div>
     <h2>Brand Colors</h2>
     <p>Match LockCMD to your website. Pick colors or keep the defaults.</p>
     <label>Accent color (main)</label>
@@ -253,7 +253,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
   <!-- Step 5: Logo & Background Image -->
   <div class="setup-step" id="setupStep5" style="display:none">
-    <div class="step-ind">Step 5 of 7</div>
+    <div class="step-ind">Step 5 of 8</div>
     <h2>Logo & Background</h2>
     <p>Optional — add a logo URL and a background image URL.</p>
     <label>Logo URL <span style="color:var(--muted)">(optional)</span></label>
@@ -557,6 +557,11 @@ function setupPrev(n){
 }
 function skipSetup(){
   settings.pinHash=sha256('0000');
+  // Apply default pricing
+  if(!settings.prices)settings.prices=JSON.parse(JSON.stringify(defaultSettings.prices));
+  settings.tripFee=settings.tripFee||65;
+  settings.serviceRadius=settings.serviceRadius||20;
+  settings.mileageRate=settings.mileageRate||2;
   localStorage.setItem('lockcmd_settings',JSON.stringify(settings));
   drawerUnlocked=true;
   document.getElementById('setupOverlay').classList.add('hidden');
