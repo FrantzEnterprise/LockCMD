@@ -877,9 +877,17 @@ function copyMsg(key){
   var msg=flows[key].build(state[key].answers);
   if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){alert('Message copied to clipboard!');}).catch(function(){prompt('Copy this message:',msg);});}else{prompt('Copy this message:',msg);}
 }
-loadSettings();
-var h=location.hash.replace('#','');
-if(h&&document.getElementById('panel-'+h)){switchTab(h);}else{switchTab('resi');}
+// Wrap in try/catch for mobile compatibility
+try{
+  loadSettings();
+  var h=location.hash.replace('#','');
+  if(h&&document.getElementById('panel-'+h)){switchTab(h);}else{switchTab('resi');}
+}catch(e){
+  console.error('LockCMD init error:',e);
+  // Still show the setup overlay if init failed
+  var so=document.getElementById('setupOverlay');
+  if(so)so.classList.remove('hidden');
+}
 </script>
 </body>
 </html>
