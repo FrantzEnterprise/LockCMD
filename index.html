@@ -390,6 +390,13 @@ function saveSettings(){
   applySettings();
 }
 
+function savePricing(){
+  settings.tripFee=parseFloat(document.getElementById('setTripFee').value)||0;
+  settings.serviceRadius=parseFloat(document.getElementById('setRadius').value)||0;
+  settings.mileageRate=parseFloat(document.getElementById('setMileRate').value)||0;
+  saveSettings();
+}
+
 function applySettings(){
   var s=settings;
   document.querySelectorAll('.tab-bar .tab').forEach(function(t){var k=t.getAttribute('data-tab');if(s.tabs[k])t.classList.remove('hidden');else{t.classList.add('hidden');t.classList.remove('active');}});
@@ -588,7 +595,22 @@ function updateSettingsDrawer(){
           saveSettings();
         };}(sk,opt,inp);
         cb.appendChild(inp);
-        cb.appendChild(document.createTextNode(opt));
+        // Price input inline next to checkbox
+        var priceInput=document.createElement('input');
+        priceInput.type='number';
+        priceInput.min='0';
+        priceInput.step='5';
+        priceInput.placeholder='$';
+        priceInput.style.cssText='width:48px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 4px;font-size:11px;text-align:center';
+        if(s.prices&&s.prices[serviceKey]&&s.prices[serviceKey][optionName])priceInput.value=s.prices[serviceKey][optionName];
+        priceInput.onchange=function(serviceKey,optionName,pi){return function(){
+          if(!s.prices)s.prices={};
+          if(!s.prices[serviceKey])s.prices[serviceKey]={};
+          s.prices[serviceKey][optionName]=parseFloat(pi.value)||0;
+          saveSettings();
+        };}(serviceKey,optionName,priceInput);
+        cb.appendChild(priceInput);
+        cb.appendChild(document.createTextNode(' '+opt));
         div.appendChild(cb);
       }
       ss.appendChild(div);
@@ -725,3 +747,12 @@ if(h&&document.getElementById('panel-'+h)){switchTab(h);}else{switchTab('resi');
 </script>
 </body>
 </html>
+      '<div style="margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:8px">'+
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">'+
+        '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">Trip fee $ <input type="number" id="setTripFee" placeholder="'+settings.tripFee+'" min="0" step="5" style="width:70px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>'+
+        '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">Radius (mi) <input type="number" id="setRadius" placeholder="'+settings.serviceRadius+'" min="0" step="5" style="width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>'+
+        '<label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text)">$/mi beyond <input type="number" id="setMileRate" placeholder="'+settings.mileageRate+'" min="0" step="0.5" style="width:60px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:12px" onchange="savePricing()"></label>'+
+      '</div>'+
+      '<p style="color:var(--muted);font-size:11px;margin:4px 0 0">Trip fee added for addresses within radius. Mileage applies beyond radius.</p>'+
+      '</div>'+
+
