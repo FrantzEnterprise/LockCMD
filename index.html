@@ -265,8 +265,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 
   <!-- Step 6: Contact Info -->
-  <div class="setup-step" id="setupStep6" style="display:none">
-    <div class="step-ind">Step 6 of 7</div>
+  <div class="setup-step"   <div class="setup-step" id="setupStep6" style="display:none">
+    <div class="step-ind">Step 6 of 8</div>
+    <h2>💰 Set Your Pricing</h2>
+    <p>Enter your trip fee, service area, and per-service prices. Parts/materials quoted at time of service.</p>
+    <label>Trip fee (within service area) — $</label>
+    <input type="number" id="setupTripFee" placeholder="65" min="0" step="5" style="width:100px" value="65">
+    <label>Service area radius (miles)</label>
+    <input type="number" id="setupRadius" placeholder="20" min="0" step="5" style="width:100px" value="20">
+    <label>Mileage rate ($ per mile over radius)</label>
+    <input type="number" id="setupMileRate" placeholder="2" min="0" step="0.5" style="width:100px" value="2">
+    <label style="margin-top:10px;font-size:12px;color:var(--accent2)">Per-service prices</label>
+    <div id="setupPrices" style="margin-top:4px"></div>
+    <button class="nav-btn" onclick="setupNext(7)">Next -></button>
+    <button class="nav-btn secondary" onclick="setupPrev(5)"><- Back</button>
+  </div>
+  <div class="setup-step" id="setupStep7" style="display:none">
+    <div class="step-ind">Step 7 of 8</div>
     <h2>Your Contact Info</h2>
     <p>This phone and email go into the SMS/email links at the end of each flow.</p>
     <label>Your phone number <span style="color:var(--muted)">(for SMS)</span></label>
@@ -275,19 +290,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <option value="1">🇺🇸 +1</option>
         <option value="44">🇬🇧 +44</option>
         <option value="61">🇦🇺 +61</option>
-        <option value="55">🇧🇷 +55</option>
-        <option value="1-876">🇯🇲 +1-876</option>
+      </select>
       </select>
       <input type="tel" id="setupPhone" placeholder="(555) 123-4567" style="flex:1">
     </div>
     <label>Your email <span style="color:var(--muted)">(for email links)</span></label>
     <input type="email" id="setupEmail" placeholder="you@locksmith.com">
     <button class="nav-btn" onclick="setupNext(7)">Next →</button>
-    <button class="nav-btn secondary" onclick="setupPrev(5)">← Back</button>
+    <button class="nav-btn secondary" onclick="setupPrev(6)">← Back</button>
   </div>
 
   <!-- Step 7: Done -->
-  <div class="setup-step" id="setupStep7" style="display:none">
+  <div class="setup-step" id="setupStep8" style="display:none">
     <div class="welcome">
       <div class="big-icon">✅</div>
       <h2>All Set!</h2>
@@ -445,6 +459,48 @@ function setupNext(n){
       saveSettings();
     }
     if(n===6){
+      // Populate pricing in wizard from current settings
+      var spEl=document.getElementById('setupPrices');
+      if(spEl&&settings.prices){
+        spEl.innerHTML='';
+        for(var sk in settings.tabs){
+          if(!settings.tabs[sk])continue;
+          var pMap=settings.prices[sk]||{};
+          var sec=document.createElement('div');
+          sec.style.margin='4px 0';
+          var hd=document.createElement('div');
+          hd.style.cssText='font-size:11px;color:var(--accent2);margin:4px 0 2px';
+          hd.textContent={resi:'Residential',comm:'Commercial',auto:'Automotive',safe:'Safe'}[sk];
+          sec.appendChild(hd);
+          for(var opt in pMap){
+            var r=document.createElement('div');
+            r.style.cssText='display:flex;align-items:center;gap:6px;margin:2px 0';
+            var l=document.createElement('span');
+            l.style.cssText='font-size:12px;color:var(--text);flex:1';
+            l.textContent=opt;
+            var inp=document.createElement('input');
+            inp.type='number';
+            inp.value=pMap[opt];
+            inp.dataset.sk=sk;
+            inp.dataset.opt=opt;
+            inp.style.cssText='width:70px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;color:var(--text);text-align:right';
+            inp.min=0;inp.step=5;
+            r.appendChild(l);
+            r.appendChild(document.createTextNode('$'));
+            r.appendChild(inp);
+            sec.appendChild(r);
+          }
+          spEl.appendChild(sec);
+        }
+      }
+      if(document.getElementById('setupTripFee')&&settings.tripFee!==undefined)
+        document.getElementById('setupTripFee').value=settings.tripFee;
+      if(document.getElementById('setupRadius')&&settings.serviceRadius!==undefined)
+        document.getElementById('setupRadius').value=settings.serviceRadius;
+      if(document.getElementById('setupMileRate')&&settings.mileageRate!==undefined)
+        document.getElementById('setupMileRate').value=settings.mileageRate;
+    }
+    if(n===7){
       settings.phone=document.getElementById('setupPhone').value.trim();
       settings.email=document.getElementById('setupEmail').value.trim();
       settings.country=document.getElementById('setupCountry').value;
@@ -480,6 +536,23 @@ function finishSetup(){
   if(sc)settings.country=sc.value;
   var bn=document.getElementById('setupBizName');
   if(bn&&bn.value.trim())settings.bizName=bn.value.trim();
+  // Save pricing from setup wizard
+  var tf=document.getElementById('setupTripFee');
+  if(tf)settings.tripFee=parseFloat(tf.value)||0;
+  var sr=document.getElementById('setupRadius');
+  if(sr)settings.serviceRadius=parseFloat(sr.value)||0;
+  var mr=document.getElementById('setupMileRate');
+  if(mr)settings.mileageRate=parseFloat(mr.value)||0;
+  var spEls=document.querySelectorAll('#setupPrices input[type="number"]');
+  spEls.forEach(function(inp){
+    var sk=inp.dataset.sk;
+    var opt=inp.dataset.opt;
+    if(sk&&opt){
+      if(!settings.prices)settings.prices={};
+      if(!settings.prices[sk])settings.prices[sk]={};
+      settings.prices[sk][opt]=parseFloat(inp.value)||0;
+    }
+  });
   saveSettings();
   document.getElementById('setupOverlay').classList.add('hidden');
   document.getElementById('gearBtn').classList.add('show');
