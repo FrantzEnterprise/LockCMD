@@ -686,7 +686,7 @@ function showResult(key){
   var fullPhone='+'+country+phone.replace(/[^\d]/g,'');
   var email=settings.email||'';
   el.innerHTML='<h3>Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div><div class="send-links">'+
-    (phone?'<a href="sms:'+fullPhone+'&body='+encodeURIComponent(msg)+'">Send via Text</a><button style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:8px 16px;cursor:pointer;color:var(--muted);font-size:12px;" onclick="copyMsg(\''+key+'\')">Copy</button>':'')+
+    (phone?'<a href="sms:'+fullPhone+'?body='+encodeURIComponent(msg)+'">Send via Text</a><button style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:8px 16px;cursor:pointer;color:var(--muted);font-size:12px;" onclick="copyMsg(\''+key+'\')">Copy</button>':'')+
     (email?'<a class="email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">Send via Email</a>':'')+
     '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">Start Over</button>'+
     '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><p style="color:var(--muted);font-size:12px;margin-bottom:6px">Also need another service?</p><div id="addServiceBtns"></div></div>';
