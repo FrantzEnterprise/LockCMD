@@ -296,7 +296,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
     <label>Your email <span style="color:var(--muted)">(for email links)</span></label>
     <input type="email" id="setupEmail" placeholder="you@locksmith.com">
-    <button class="nav-btn" onclick="setupNext(7)">Next →</button>
+    <button class="nav-btn" onclick="setupNext(8)">Next →</button>
     <button class="nav-btn secondary" onclick="setupPrev(6)">← Back</button>
   </div>
 
@@ -404,6 +404,37 @@ function saveSettings(){
   applySettings();
 }
 
+function savePricing(){
+  settings.tripFee=parseFloat(document.getElementById('setTripFee').value)||0;
+  settings.serviceRadius=parseFloat(document.getElementById('setRadius').value)||0;
+  settings.mileageRate=parseFloat(document.getElementById('setMileRate').value)||0;
+  saveSettings();
+}
+function buildEstimate(key){
+  var ans=state[key]&&state[key].answers;
+  if(!ans)return null;
+  var f=flows[key];
+  if(!f||!f.steps.length)return null;
+  var firstKey=f.steps[0].key;
+  var selectedService=ans[firstKey];
+  if(!selectedService)return null;
+  var priceMap=settings.prices&&settings.prices[key];
+  var servicePrice=priceMap?priceMap[selectedService]:null;
+  if(servicePrice===undefined||servicePrice===null)return null;
+  var tripFee=settings.tripFee||0;
+  var total=tripFee+servicePrice;
+  var lines='--- ESTIMATE ---\n';
+  lines+='Service call: $'+tripFee.toFixed(2)+'\n';
+  lines+=selectedService+': $'+servicePrice.toFixed(2)+'\n';
+  if(settings.mileageRate>0&&settings.serviceRadius>0){
+    lines+='Mileage: included within '+settings.serviceRadius+' mi\n';
+    lines+='  $'+settings.mileageRate.toFixed(2)+'/mi beyond radius\n';
+  }
+  lines+='---\n';
+  lines+='Total est: $'+total.toFixed(2)+'\n';
+  lines+='Parts not included \u2014 quoted at time of service.';
+  return {total:total,service:selectedService,price:servicePrice,text:lines};
+}
 function applySettings(){
   var s=settings;
   document.querySelectorAll('.tab-bar .tab').forEach(function(t){var k=t.getAttribute('data-tab');if(s.tabs[k])t.classList.remove('hidden');else{t.classList.add('hidden');t.classList.remove('active');}});
@@ -786,7 +817,7 @@ function showResult(key){
   var country=settings.country||'1';
   var fullPhone='+'+country+phone.replace(/[^\d]/g,'');
   var email=settings.email||'';
-  el.innerHTML='<h3>Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div><div class="send-links">'+
+  el.innerHTML='<h3>Done! Send this to your locksmith</h3><div class="msg">'+msg.replace(/\n/g,'<br>')+'</div>'+(function(){var e=buildEstimate(key);return e?'<div class="msg" style="border-left:3px solid var(--accent2);margin-top:10px"><strong style="color:var(--accent2)">💰 Estimate</strong><br>'+e.text.replace(/\n/g,'<br>')+'</div>':'';})()+'<div class="send-links">'+
     (phone?'<a href="sms:'+fullPhone+'?body='+encodeURIComponent(msg)+'">Send via Text</a><button style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:8px 16px;cursor:pointer;color:var(--muted);font-size:12px;" onclick="copyMsg(\''+key+'\')">Copy</button>':'')+
     (email?'<a class="email" href="mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg)+'">Send via Email</a>':'')+
     '</div><button class="reset-btn" onclick="startFlow(\''+key+'\')">Start Over</button>'+
